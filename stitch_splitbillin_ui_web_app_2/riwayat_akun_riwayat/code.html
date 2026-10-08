@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary": "#006948", "surface-dim": "#d2d9f4", "on-primary": "#ffffff", "tertiary": "#825100", "on-tertiary-fixed-variant": "#653e00", "on-tertiary-container": "#fffbff", "secondary-fixed": "#6ffbbe", "error-container": "#ffdad6", "on-tertiary": "#ffffff", "surface-container": "#eaedff", "surface-container-low": "#f2f3ff", "inverse-primary": "#68dba9", "on-primary-fixed-variant": "#005137", "inverse-surface": "#283044", "surface-bright": "#faf8ff", "on-surface-variant": "#3d4a42", "on-surface": "#131b2e", "surface-tint": "#006c4a", "error": "#ba1a1a", "on-primary-container": "#f5fff7", "primary-container": "#00855d", "on-secondary-fixed-variant": "#005236", "on-tertiary-fixed": "#2a1700", "inverse-on-surface": "#eef0ff", "on-primary-fixed": "#002114", "secondary": "#006c49", "on-secondary": "#ffffff", "on-background": "#131b2e", "primary-fixed-dim": "#68dba9", "on-secondary-fixed": "#002113", "on-error": "#ffffff", "surface-container-highest": "#dae2fd", "outline-variant": "#bccac0", "background": "#faf8ff", "on-error-container": "#93000a", "outline": "#6d7a72", "surface": "#faf8ff", "on-secondary-container": "#00714d", "secondary-container": "#6cf8bb", "primary-fixed": "#85f8c4", "surface-container-high": "#e2e7ff", "secondary-fixed-dim": "#4edea3", "surface-container-lowest": "#ffffff", "tertiary-container": "#a36700", "surface-variant": "#dae2fd", "tertiary-fixed": "#ffddb8", "tertiary-fixed-dim": "#ffb95f" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2.25rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "margin": "1rem", "space-md": "1rem", "gutter": "1rem", "space-sm": "0.5rem", "gutter-desktop": "1.5rem", "margin-desktop": "2.5rem" }, "fontFamily": { "body-md": ["Plus Jakarta Sans"], "label-mono": ["JetBrains Mono"], "headline-lg": ["Plus Jakarta Sans"], "currency-hero": ["JetBrains Mono"], "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "currency-item": ["JetBrains Mono"], "display-lg": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"] }, "fontSize": { "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }], "label-mono": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "currency-hero": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "currency-item": ["16px", { "lineHeight": "20px", "fontWeight": "600" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "800" }], "title-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }], "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } };</script></head><body class="bg-surface-container-high font-body-md text-on-surface antialiased min-h-screen relative selection:bg-secondary-container selection:text-on-secondary-container"><div class="fixed inset-0 pointer-events-none opacity-40 bg-[radial-gradient(#006948_1px,transparent_1px)] [background-size:24px_24px]"></div><div class="relative max-w-[460px] mx-auto min-h-screen bg-surface-container-lowest shadow-[0_20px_50px_rgba(0,105,72,0.12)] flex flex-col"><header class="fixed top-0 max-w-[460px] w-full z-50 bg-surface-container-lowest/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><img alt="SplitBillin Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W0tZ6Irxv2k6EFxiPWnZ7O_N4Sm5oBPYIAIwKCqK4Ssc_geZbfqxb0iLm_4f20zjMI3u4ZjCmqdeu1EBpa3ICU-XaomrUrmtiwxsEE9Ea9bVdapY_-sIDIGLpwgN4Rc21sGTcsZ5RB-2rVEobefmorSb45g1JpLhIcNqWsXYHtZfKUfxC8dA19CNBr5jXkrA363cuiqQrCzuiHWr5BKFWg6sdRcFiThb1qMSyNsRU"/><span class="font-title-sm text-title-sm text-on-surface tracking-tight">SplitBillin</span></div><nav class="flex items-center gap-space-md" data-active-classes="text-primary font-title-sm"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" data-path="tentang" href="#">Tentang</a><button aria-label="Toggle Theme" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">light_mode</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></nav></div></header><main class="w-full flex-1 pt-16 pb-20 bg-surface-container-lowest px-gutter"><div class="flex flex-col w-full">
+<!-- Interactive Script for Filtering & Quick Feedback -->
+<script>
+    function switchFilter(type, btn) {
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(b => {
+        b.className = 'filter-btn shrink-0 px-space-md py-space-xs rounded-full font-label-sm text-label-sm transition-all duration-200 bg-surface-container text-on-surface-variant hover:bg-surface-container-high';
+      });
+      btn.className = 'filter-btn shrink-0 px-space-md py-space-xs rounded-full font-label-sm text-label-sm transition-all duration-200 bg-primary text-on-primary shadow-sm';
+
+      const cards = document.querySelectorAll('.bill-card');
+      cards.forEach(card => {
+        const status = card.getAttribute('data-status');
+        if (type === 'all') {
+          card.classList.remove('hidden');
+        } else if (type === 'pending' && status === 'pending') {
+          card.classList.remove('hidden');
+        } else if (type === 'settled' && status === 'settled') {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function triggerQuickToast(title) {
+      const toast = document.getElementById('toast-feedback');
+      const toastText = document.getElementById('toast-feedback-text');
+      if (toast && toastText) {
+        toastText.innerText = 'Membuka slip ' + title + '...';
+        toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+        }, 2200);
+      }
+    }
+  </script>
+<!-- User Account & Sync Banner Section -->
+<section class="mb-space-lg">
+<!-- User Profile Strip -->
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative w-11 h-11 rounded-full overflow-hidden shrink-0 shadow-sm bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close up warm portrait photograph of Rizky Pratama, a friendly young Indonesian professional man wearing casual modern green linen shirt with bright background lighting, sharp detail, fintech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC34UX6k5gMDBkcqWL255MtBDmg7n5_cw4QcE2LFewXKEGzWyIyr0cDlELvR4qn2QFrBqVXWUAbZgzl65LE-Sj6fNwLnurw09JbHwAGAQPdu1aTBUKfJLFFtF30uroXLwvPlIiabTk3_r5-zUHa_OaJw2AkXwBW0P-ygkMYZtbJ0bgx8y4jsDP9ktVXhCNvzmHUXstF8u9IpUKbhhx7vimvz5hXQpt-wowLZ1QDCOI"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-secondary-fixed-dim rounded-full shadow-sm"></span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm text-on-surface truncate">Rizky Pratama</span>
+<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-mono text-[10px] leading-none shrink-0">
+<span class="material-symbols-outlined text-[11px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+              Terhubung
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">rizky.pratama@gmail.com</p>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button aria-label="Refresh Sinkronisasi" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+</button>
+</div>
+</div>
+<!-- Page Title & Visual Microcopy -->
+<div class="mb-space-md">
+<div class="flex items-baseline justify-between">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">Riwayat Split Bill</h1>
+<span class="font-label-mono text-label-mono text-primary font-semibold">6 TOTAL</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Tersimpan otomatis dan aman di akun Google kamu.</p>
+</div>
+<!-- Sync Live Pill / Card -->
+<div class="p-space-sm bg-surface-container-low rounded-xl flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">cloud_done</span>
+</div>
+<div class="truncate">
+<span class="font-label-sm text-label-sm text-on-surface block leading-tight">Sinkron Lintas Perangkat Aktif</span>
+<span class="font-label-mono text-[11px] text-primary truncate">Buka di HP, laptop, atau tablet instan</span>
+</div>
+</div>
+<span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-mono text-[10px]">
+        Auto-Sync
+      </span>
+</div>
+</section>
+<!-- Search & Filter Bar -->
+<section class="mb-space-lg flex flex-col gap-space-sm">
+<!-- Search Input -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">search</span>
+<input class="w-full pl-10 pr-10 py-2.5 bg-surface-container-low rounded-xl font-body-md text-body-md text-on-surface placeholder:text-outline outline-none focus:bg-surface-container-lowest transition-colors shadow-sm" placeholder="Cari restoran, tempat, atau tanggal..." type="text"/>
+<button aria-label="Filter Opsi" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg text-outline hover:text-on-surface flex items-center justify-center" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<!-- Filter Chips Horizontal Scroll -->
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+<button class="filter-btn shrink-0 px-space-md py-space-xs rounded-full font-label-sm text-label-sm transition-all duration-200 bg-primary text-on-primary shadow-sm" onclick="switchFilter('all', this)" type="button">
+        Semua (6)
+      </button>
+<button class="filter-btn shrink-0 px-space-md py-space-xs rounded-full font-label-sm text-label-sm transition-all duration-200 bg-surface-container text-on-surface-variant hover:bg-surface-container-high" onclick="switchFilter('pending', this)" type="button">
+        Belum Lunas (2)
+      </button>
+<button class="filter-btn shrink-0 px-space-md py-space-xs rounded-full font-label-sm text-label-sm transition-all duration-200 bg-surface-container text-on-surface-variant hover:bg-surface-container-high" onclick="switchFilter('settled', this)" type="button">
+        Semua Lunas (4)
+      </button>
+</div>
+</section>
+<!-- Ticket Receipts Feed -->
+<section class="flex flex-col gap-space-md pb-24">
+<!-- RECEIPT 1: GEDUNG RE (PENDING / PENALANG) -->
+<article class="bill-card cursor-pointer group relative bg-surface-container-lowest rounded-2xl shadow-[0_10px_28px_-12px_rgba(0,105,72,0.14)] overflow-hidden transition-transform duration-200 active:scale-[0.99] hover:-translate-y-0.5" data-status="pending" onclick="triggerQuickToast('GEDUNG RE')">
+<!-- Upper Ticket Header with Cutout Notches -->
+<div class="p-space-md pb-space-sm relative">
+<div class="flex items-start justify-between gap-space-sm mb-2">
+<div class="min-w-0">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-[11px] font-bold tracking-wide uppercase">
+                Kamu Penalang
+              </span>
+<span class="font-label-mono text-[11px] text-tertiary font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container animate-pulse"></span>
+                2 Belum Bayar
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface tracking-tight group-hover:text-primary transition-colors truncate">
+              GEDUNG RE
+            </h2>
+<div class="flex items-center gap-2 font-label-mono text-label-mono text-on-surface-variant mt-0.5">
+<span>29 Jun 2026</span>
+<span>•</span>
+<span class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">group</span>
+                5 orang
+              </span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="block font-label-mono text-[11px] text-outline uppercase tracking-wider">Total Bill</span>
+<span class="font-currency-item text-currency-item text-on-surface font-bold">Rp55.700</span>
+</div>
+</div>
+<!-- Settlement Bar Indicator -->
+<div class="mt-space-sm bg-surface-container-low rounded-xl p-2.5">
+<div class="flex items-center justify-between mb-1.5 font-label-mono text-label-mono">
+<span class="text-on-surface-variant font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">pie_chart</span>
+              3 dari 5 lunas
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-bold text-[11px]">
+              Sisa Rp22.300
+            </span>
+</div>
+<!-- Progress Track -->
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 60%;"></div>
+</div>
+</div>
+</div>
+<!-- Ticket Perforated Tear Line with Semicircle Notches -->
+<div class="relative w-full h-6 flex items-center justify-between px-0 overflow-hidden pointer-events-none">
+<!-- Left Notch Cutout -->
+<div class="w-4 h-8 bg-surface-container-lowest -ml-2 rounded-r-full shadow-inner"></div>
+<!-- Dashed Perforation Rule -->
+<div class="flex-1 mx-2 h-0 border-b border-dashed border-outline-variant opacity-60"></div>
+<!-- Right Notch Cutout -->
+<div class="w-4 h-8 bg-surface-container-lowest -mr-2 rounded-l-full shadow-inner"></div>
+</div>
+<!-- Lower Ticket Bottom Slip Action Info -->
+<div class="px-space-md pb-space-md pt-1 flex items-center justify-between bg-surface-bright">
+<div class="flex items-center gap-2">
+<!-- Assignee avatars stack -->
+<div class="flex -space-x-1.5 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-label-mono text-[9px] font-bold ring-2 ring-surface-container-lowest">RP</div>
+<div class="w-6 h-6 rounded-full bg-primary-fixed-dim text-on-primary-fixed flex items-center justify-center font-label-mono text-[9px] font-bold ring-2 ring-surface-container-lowest">AN</div>
+<div class="w-6 h-6 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-label-mono text-[9px] font-bold ring-2 ring-surface-container-lowest">DM</div>
+<div class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-mono text-[9px] font-bold ring-2 ring-surface-container-lowest">+2</div>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Langsung kelola tanpa token</span>
+</div>
+<div class="inline-flex items-center gap-1 text-primary font-label-sm text-label-sm group-hover:translate-x-0.5 transition-transform">
+<span>Buka Slip</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- RECEIPT 2: Bebek Kaleyo Tebet (SETTLED) -->
+<article class="bill-card cursor-pointer group relative bg-surface-container-lowest rounded-2xl shadow-[0_10px_28px_-12px_rgba(0,105,72,0.12)] overflow-hidden transition-transform duration-200 active:scale-[0.99] hover:-translate-y-0.5" data-status="settled" onclick="triggerQuickToast('Bebek Kaleyo Tebet')">
+<div class="p-space-md pb-space-sm relative">
+<div class="flex items-start justify-between gap-space-sm mb-2">
+<div class="min-w-0">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Semua Lunas (6/6)
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface tracking-tight group-hover:text-primary transition-colors truncate">
+              Bebek Kaleyo Tebet
+            </h2>
+<div class="flex items-center gap-2 font-label-mono text-label-mono text-on-surface-variant mt-0.5">
+<span>5 Apr 2026</span>
+<span>•</span>
+<span class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">group</span>
+                6 orang
+              </span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="block font-label-mono text-[11px] text-outline uppercase tracking-wider">Total Selesai</span>
+<span class="font-currency-item text-currency-item text-on-surface font-bold">Rp706.497</span>
+</div>
+</div>
+<!-- Progress settled bar -->
+<div class="mt-space-sm bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Tuntas dibayar via QRIS &amp; Transfer</span>
+</div>
+<span class="font-label-mono text-[11px] text-secondary font-semibold">100% Selesai</span>
+</div>
+</div>
+<!-- Ticket Perforated Tear Line with Semicircle Notches -->
+<div class="relative w-full h-6 flex items-center justify-between px-0 overflow-hidden pointer-events-none">
+<div class="w-4 h-8 bg-surface-container-lowest -ml-2 rounded-r-full shadow-inner"></div>
+<div class="flex-1 mx-2 h-0 border-b border-dashed border-outline-variant opacity-60"></div>
+<div class="w-4 h-8 bg-surface-container-lowest -mr-2 rounded-l-full shadow-inner"></div>
+</div>
+<!-- Lower Ticket Bottom Slip Action Info -->
+<div class="px-space-md pb-space-md pt-1 flex items-center justify-between bg-surface-bright">
+<span class="font-label-mono text-[11px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">receipt</span>
+          #BKL-260405-9
+        </span>
+<div class="inline-flex items-center gap-1 text-on-surface-variant group-hover:text-primary font-label-sm text-label-sm transition-colors">
+<span>Lihat Arsip</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</div>
+</div>
+</article>
+<!-- RECEIPT 3: Kopi Kenangan Mall Kota Kasablanka (SETTLED) -->
+<article class="bill-card cursor-pointer group relative bg-surface-container-lowest rounded-2xl shadow-[0_10px_28px_-12px_rgba(0,105,72,0.12)] overflow-hidden transition-transform duration-200 active:scale-[0.99] hover:-translate-y-0.5" data-status="settled" onclick="triggerQuickToast('Kopi Kenangan')">
+<div class="p-space-md pb-space-sm relative">
+<div class="flex items-start justify-between gap-space-sm mb-2">
+<div class="min-w-0">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Semua Lunas (4/4)
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface tracking-tight group-hover:text-primary transition-colors truncate">
+              Kopi Kenangan Kota Kasablanka
+            </h2>
+<div class="flex items-center gap-2 font-label-mono text-label-mono text-on-surface-variant mt-0.5">
+<span>28 Mar 2026</span>
+<span>•</span>
+<span class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">group</span>
+                4 orang
+              </span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="block font-label-mono text-[11px] text-outline uppercase tracking-wider">Total</span>
+<span class="font-currency-item text-currency-item text-on-surface font-bold">Rp98.000</span>
+</div>
+</div>
+<div class="mt-space-sm bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Split rata (Rp24.500 / orang)</span>
+</div>
+<span class="font-label-mono text-[11px] text-secondary font-semibold">Lunas</span>
+</div>
+</div>
+<!-- Ticket Perforated Tear Line with Semicircle Notches -->
+<div class="relative w-full h-6 flex items-center justify-between px-0 overflow-hidden pointer-events-none">
+<div class="w-4 h-8 bg-surface-container-lowest -ml-2 rounded-r-full shadow-inner"></div>
+<div class="flex-1 mx-2 h-0 border-b border-dashed border-outline-variant opacity-60"></div>
+<div class="w-4 h-8 bg-surface-container-lowest -mr-2 rounded-l-full shadow-inner"></div>
+</div>
+<!-- Lower Ticket Bottom Slip Action Info -->
+<div class="px-space-md pb-space-md pt-1 flex items-center justify-between bg-surface-bright">
+<span class="font-label-mono text-[11px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_cafe</span>
+          Coffeebreak santai
+        </span>
+<div class="inline-flex items-center gap-1 text-on-surface-variant group-hover:text-primary font-label-sm text-label-sm transition-colors">
+<span>Lihat Arsip</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</div>
+</div>
+</article>
+<!-- RECEIPT 4: Padang Merdeka Hayam Wuruk (SETTLED) -->
+<article class="bill-card cursor-pointer group relative bg-surface-container-lowest rounded-2xl shadow-[0_10px_28px_-12px_rgba(0,105,72,0.12)] overflow-hidden transition-transform duration-200 active:scale-[0.99] hover:-translate-y-0.5" data-status="settled" onclick="triggerQuickToast('Padang Merdeka')">
+<div class="p-space-md pb-space-sm relative">
+<div class="flex items-start justify-between gap-space-sm mb-2">
+<div class="min-w-0">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Semua Lunas (7/7)
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface tracking-tight group-hover:text-primary transition-colors truncate">
+              Padang Merdeka Hayam Wuruk
+            </h2>
+<div class="flex items-center gap-2 font-label-mono text-label-mono text-on-surface-variant mt-0.5">
+<span>14 Mar 2026</span>
+<span>•</span>
+<span class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">group</span>
+                7 orang
+              </span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="block font-label-mono text-[11px] text-outline uppercase tracking-wider">Total</span>
+<span class="font-currency-item text-currency-item text-on-surface font-bold">Rp425.000</span>
+</div>
+</div>
+<div class="mt-space-sm bg-surface-container-low rounded-xl p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Lengkap dengan PPN 10% &amp; Servis</span>
+</div>
+<span class="font-label-mono text-[11px] text-secondary font-semibold">Tutup Kasir</span>
+</div>
+</div>
+<!-- Ticket Perforated Tear Line with Semicircle Notches -->
+<div class="relative w-full h-6 flex items-center justify-between px-0 overflow-hidden pointer-events-none">
+<div class="w-4 h-8 bg-surface-container-lowest -ml-2 rounded-r-full shadow-inner"></div>
+<div class="flex-1 mx-2 h-0 border-b border-dashed border-outline-variant opacity-60"></div>
+<div class="w-4 h-8 bg-surface-container-lowest -mr-2 rounded-l-full shadow-inner"></div>
+</div>
+<!-- Lower Ticket Bottom Slip Action Info -->
+<div class="px-space-md pb-space-md pt-1 flex items-center justify-between bg-surface-bright">
+<span class="font-label-mono text-[11px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">restaurant</span>
+          Makan Siang Tim
+        </span>
+<div class="inline-flex items-center gap-1 text-on-surface-variant group-hover:text-primary font-label-sm text-label-sm transition-colors">
+<span>Lihat Arsip</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</div>
+</div>
+</article>
+<!-- Visual Stat & Security Snapshot -->
+<div class="p-space-md rounded-2xl bg-surface-container-low flex items-center gap-space-md mt-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center shrink-0 shadow-sm text-primary">
+<span class="material-symbols-outlined text-[26px]">devices</span>
+</div>
+<div class="min-w-0">
+<h3 class="font-title-sm text-title-sm text-on-surface">Tanpa Kunci atau PIN Ribet</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Setiap bill langsung tertaut otomatis ke akun Google Rizky. Kamu bebas edit atau hapus kapan saja.</p>
+</div>
+</div>
+</section>
+<!-- Sticky / Fixed FAB Floating Action Button (New Bill) -->
+<div class="fixed bottom-20 left-0 right-0 max-w-[460px] mx-auto px-gutter pointer-events-none z-40 flex justify-end">
+<a class="pointer-events-auto group inline-flex items-center gap-2.5 px-5 py-3 rounded-full bg-primary text-on-primary font-title-sm text-title-sm shadow-[0_8px_24px_rgba(0,105,72,0.38)] hover:bg-primary-container active:scale-95 transition-all" data-path="calculator" href="#">
+<span class="material-symbols-outlined text-[22px] transition-transform group-hover:rotate-90">add</span>
+<span>Bikin Split Bill Baru</span>
+</a>
+</div>
+<!-- Toast Notification Feedback Component -->
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none" id="toast-feedback">
+<div class="px-4 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface shadow-xl flex items-center gap-2 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[18px] text-inverse-primary">check_circle</span>
+<span id="toast-feedback-text">Membuka slip...</span>
+</div>
+</div>
+</div></main><footer class="fixed bottom-0 max-w-[460px] w-full z-50 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"><div class="h-16 px-gutter-desktop flex items-center justify-around"><a class="flex flex-col items-center justify-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors group" data-path="calculator" href="#"><span class="material-symbols-outlined text-[22px] group-hover:text-primary transition-colors">receipt_long</span><span class="font-label-sm text-label-sm">Hitung</span></a><a class="flex flex-col items-center justify-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors group" data-path="riwayat-tagihan" href="#"><span class="material-symbols-outlined text-[22px] group-hover:text-primary transition-colors">history</span><span class="font-label-sm text-label-sm">Riwayat</span></a><a class="flex flex-col items-center justify-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors group" data-path="ringkasan-split" href="#"><span class="material-symbols-outlined text-[22px] group-hover:text-primary transition-colors">payments</span><span class="font-label-sm text-label-sm">Tagihan</span></a><a class="flex flex-col items-center justify-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors group" data-path="pengaturan" href="#"><span class="material-symbols-outlined text-[22px] group-hover:text-primary transition-colors">settings</span><span class="font-label-sm text-label-sm">Pengaturan</span></a></div></footer></div></body></html>
