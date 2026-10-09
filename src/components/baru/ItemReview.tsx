@@ -51,7 +51,8 @@ export function ItemReview({
   const { net, computed } = computeDraftTotals(items, fees)
   const diff = total - computed
   const diffResolved = diff !== 0 && fees.adjustment === diff
-  const blocked = items.length === 0 || (diff !== 0 && !diffResolved)
+  const merchantMissing = merchant.trim() === ''
+  const blocked = items.length === 0 || merchantMissing || (diff !== 0 && !diffResolved)
 
   const updateFee = (patch: Partial<BillFees>) => onFeesChange({ ...fees, ...patch })
 
@@ -94,8 +95,11 @@ export function ItemReview({
             value={merchant}
             onChange={(e) => onMerchantChange(e.target.value)}
             placeholder="Nama tempat"
+            aria-label="Nama tempat"
+            aria-invalid={merchantMissing}
             className="bg-transparent font-bold text-sm text-on-surface focus:outline-none w-full"
           />
+          {merchantMissing && <span className="text-[11px] text-error">Nama tempat wajib diisi dulu.</span>}
           <input
             type="date"
             value={date}
@@ -336,7 +340,11 @@ export function ItemReview({
           disabled={blocked}
           className="flex-1 py-3 bg-primary text-on-primary font-semibold rounded-xl text-sm disabled:opacity-50"
         >
-          {diff !== 0 && !diffResolved ? 'Selesaikan selisih dulu' : 'Lanjut →'}
+          {merchantMissing
+            ? 'Isi nama tempat dulu'
+            : diff !== 0 && !diffResolved
+              ? 'Selesaikan selisih dulu'
+              : 'Lanjut →'}
         </button>
       </div>
       <button type="button" onClick={onManual} className="text-xs text-primary font-medium py-1 hover:underline">
