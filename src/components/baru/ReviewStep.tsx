@@ -3,13 +3,15 @@
 import React from 'react'
 import { MemberAvatar } from './MemberChip'
 import { TicketCard, TicketNotchDivider } from '@/components/TicketCard'
+import { formatDate } from '@/lib/format'
 import { formatIDR } from '@/lib/money'
-import { computeDraftTotals } from '@/lib/receipt'
+import { withAdjustment } from '@/lib/receipt'
 import { computeManualSplit, computeSplit } from '@/lib/split'
 import type { BillFees, BillItem, BillMember, ItemAssignment, ManualSplit, PaymentInfo } from '@/lib/schemas'
 
 interface ReviewStepProps {
   mode: 'receipt' | 'manual'
+  editing: boolean
   merchant: string
   date: string
   total: number
@@ -19,15 +21,16 @@ interface ReviewStepProps {
   assignments: Record<string, ItemAssignment[]>
   manual: ManualSplit | null
   payment: PaymentInfo
+  hasQris: boolean
   submitting: boolean
   error: string | null
-  onAdjust: (diff: number) => void
   onSubmit: () => void
   onBack: () => void
 }
 
 export function ReviewStep({
   mode,
+  editing,
   merchant,
   date,
   total,
@@ -37,9 +40,9 @@ export function ReviewStep({
   assignments,
   manual,
   payment,
+  hasQris,
   submitting,
   error,
-  onAdjust,
   onSubmit,
   onBack,
 }: ReviewStepProps) {
@@ -47,41 +50,44 @@ export function ReviewStep({
 
   let memberTotals: Record<string, number> = {}
   if (mode === 'receipt') {
-    memberTotals = computeSplit(items, fees, total, members, assignments).memberTotals
+    memberTotals = computeSplit(items, withAdjustment(items, fees, total), total, members, assignments).memberTotals
   } else if (manual) {
     memberTotals = computeManualSplit(total, members, manual.split, manual.values).memberTotals
   }
 
-  const { computed } = computeDraftTotals(items, fees)
-  const diff = mode === 'receipt' && fees.adjustment === 0 ? total - computed : 0
+  const methods = payment.methods.filter((m) => m.provider.trim() || m.number.trim())
+  const paymentSummary = [
+    methods.length > 0 ? `${methods.length} cara bayar` : null,
+    hasQris ? 'QRIS' : null,
+  ].filter(Boolean)
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-lg font-bold text-on-surface">Tinjau Split Bill</h1>
+      <h1 className="text-lg font-bold text-on-surface">{editing ? 'Tinjau perubahan' : 'Tinjau dan buat'}</h1>
 
-      <TicketCard className="p-5">
-        <div className="flex items-start justify-between">
-          <div>
-            <h2 className="text-lg font-bold text-on-surface">{merchant || 'Tanpa nama'}</h2>
-            {date && <p className="text-xs text-on-surface-variant">{date}</p>}
+      <TicketCard>
+        <div className="px-5 pt-5 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h2 className="text-lg font-bold text-on-surface break-words">{merchant.trim() || 'Tanpa nama'}</h2>
+            {date && <p className="text-xs text-on-surface-variant">{formatDate(date)}</p>}
           </div>
-          <div className="text-right">
+          <div className="text-right shrink-0">
             <span className="text-[11px] text-on-surface-variant block">Total</span>
-            <span className="font-mono text-lg font-bold text-on-surface">{formatIDR(total)}</span>
+            <span className="font-mono text-xl font-bold text-on-surface">{formatIDR(total)}</span>
           </div>
         </div>
 
         <TicketNotchDivider />
 
-        <div className="flex flex-col gap-2">
+        <div className="px-5 pb-6 flex flex-col gap-2.5">
           {members.map((m) => (
-            <div key={m.id} className="flex items-center justify-between text-sm">
-              <span className="flex items-center gap-2 text-on-surface">
+            <div key={m.id} className="flex items-center justify-between gap-3 text-sm">
+              <span className="flex items-center gap-2 text-on-surface min-w-0">
                 <MemberAvatar member={m} />
-                {m.name}
-                {m.is_payer && <span className="text-[10px] text-on-surface-variant">(penalang)</span>}
+                <span className="truncate">{m.name}</span>
+                {m.is_payer && <span className="text-[10px] text-on-surface-variant shrink-0">(nalangin)</span>}
               </span>
-              <span className="font-mono font-semibold text-on-surface">
+              <span className="font-mono font-semibold text-on-surface shrink-0">
                 {formatIDR(memberTotals[m.id] ?? 0)}
               </span>
             </div>
@@ -89,33 +95,27 @@ export function ReviewStep({
         </div>
       </TicketCard>
 
-      {diff !== 0 && (
-        <div className="bg-amber-100 dark:bg-amber-950/40 rounded-xl p-3 flex flex-col gap-2">
-          <p className="text-xs text-on-surface">
-            Masih ada selisih <span className="font-mono font-bold">{formatIDR(Math.abs(diff))}</span> yang belum
-            teralokasi ke siapa pun.
-          </p>
-          <button
-            type="button"
-            onClick={() => onAdjust(diff)}
-            className="self-start px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold shadow-sm"
-          >
-            Selaraskan ke total
-          </button>
+      <div className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/30 text-xs text-on-surface-variant flex flex-col gap-1.5">
+        <p>
+          Dibayar ke <strong className="text-on-surface">{payer?.name}</strong>
+          {paymentSummary.length > 0 ? ` lewat ${paymentSummary.join(' + ')}.` : '. Info bayar belum diisi.'}
+        </p>
+        <p>{mode === 'receipt' ? `${items.length} item dari struk.` : 'Dibagi manual, tanpa rincian item.'}</p>
+        <p>Split bill ini aktif 90 hari.</p>
+      </div>
+
+      {error && (
+        <div role="alert" className="bg-error-container text-on-error-container p-3 rounded-xl text-xs">
+          {error} {!editing && 'Drafmu tetap aman, coba lagi.'}
         </div>
       )}
-
-      <p className="text-xs text-on-surface-variant text-center">
-        Dibayar ke <strong className="text-on-surface">{payer.name}</strong>. Split bill ini aktif 90 hari.
-      </p>
-
-      {error && <div className="bg-error-container text-on-error-container p-3 rounded-xl text-xs">{error}</div>}
 
       <div className="flex gap-2">
         <button
           type="button"
           onClick={onBack}
-          className="flex-1 py-3 bg-surface-container text-on-surface font-semibold rounded-xl text-sm"
+          disabled={submitting}
+          className="flex-1 py-3 bg-surface-container text-on-surface font-semibold rounded-xl text-sm disabled:opacity-60"
         >
           ← Kembali
         </button>
@@ -125,12 +125,8 @@ export function ReviewStep({
           disabled={submitting}
           className="flex-1 py-3 bg-primary text-on-primary font-semibold rounded-xl text-sm shadow-md disabled:opacity-60"
         >
-          {submitting ? 'Membuat…' : 'Buat Split Bill ✓'}
+          {submitting ? 'Menyimpan…' : editing ? 'Simpan perubahan' : 'Buat split bill'}
         </button>
-      </div>
-
-      <div className="text-[11px] text-outline text-center">
-        {payment.methods.length} cara bayar · {mode === 'receipt' ? `${items.length} item` : 'mode manual'}
       </div>
     </div>
   )

@@ -69,7 +69,7 @@ function drawToJpeg(source: Drawable, width: number, height: number, quality: nu
 /**
  * Compress an image file. Throws on unsupported types or decode failure.
  */
-export async function compressImage(file: File): Promise<CompressedImage> {
+export async function compressImage(file: File, maxBytes = MAX_BYTES): Promise<CompressedImage> {
   if (!ALLOWED_TYPES.includes(file.type)) throw new Error('unsupported_type')
 
   const { drawable, cleanup } = await loadDrawable(file)
@@ -81,6 +81,7 @@ export async function compressImage(file: File): Promise<CompressedImage> {
       { maxSide: 1600, quality: 0.8 },
       { maxSide: 1600, quality: 0.6 },
       { maxSide: 1280, quality: 0.6 },
+      { maxSide: 1000, quality: 0.5 },
     ]
 
     let result: { blob: Blob; width: number; height: number } | null = null
@@ -88,10 +89,10 @@ export async function compressImage(file: File): Promise<CompressedImage> {
       const size = fitInside(width, height, step.maxSide)
       const blob = await drawToJpeg(drawable, size.width, size.height, step.quality)
       result = { blob, ...size }
-      if (blob.size <= MAX_BYTES) break
+      if (blob.size <= maxBytes) break
     }
 
-    if (!result) throw new Error('compress')
+    if (!result || result.blob.size > maxBytes) throw new Error('compress')
     return {
       blob: result.blob,
       previewUrl: URL.createObjectURL(result.blob),

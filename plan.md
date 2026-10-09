@@ -177,6 +177,8 @@ Hal baru yang harus ditulis: kompresi gambar di browser, parser Rupiah (`17.400`
 
 Langkah 1 (uji model) **sudah selesai**; hasilnya di §2–3.
 
+**Status 9 Okt 2026:** langkah 2–9 sudah diimplementasikan dan diuji lokal. Yang masih menunggu kredensial: kunci Turnstile (langkah 5, sementara `TURNSTILE_BYPASS=1` di lokal), OAuth client Google (langkah 8, alur akun diuji dengan user sementara), dan deploy Vercel + secret keepalive (langkah 7).
+
 2. **Scaffold.** Next.js + tema Tailwind 4 dari token DESIGN.md + font + vitest. `split.ts` dan `money.ts` beserta tes. *Selesai bila:* tes lulus, termasuk invarian Σ bagian = total pada struk uji (diskon per item, pajak termasuk dan ditambahkan, pembulatan) dan data uji §6 menghasilkan 21.750.
 3. **Alur manual + halaman rincian.** Komponen dasar (kartu tiket, chip anggota, baris item, panel ringkasan), migrasi `bills`, server action buat bill, `/b/[id]`. *Selesai bila:* bill manual bisa dibuat dan dibuka dari perangkat lain.
 4. **Scan.** `/api/scan` (prompt v2 di pesan system), kompresi gambar, layar Ambil struk, Memindai + lima keadaan gagal, Periksa item (termasuk banner selisih). *Selesai bila:* `scripts/ocr-test.mjs` lewat jalur API memberi skor setara (≥ 5/6) dan tiap `code` galat menampilkan layar yang benar.

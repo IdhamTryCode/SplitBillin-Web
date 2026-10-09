@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from 'react'
 import { MemberAvatar, MemberChip } from './MemberChip'
 import { formatIDR } from '@/lib/money'
+import { withAdjustment } from '@/lib/receipt'
 import { computeSplit } from '@/lib/split'
 import type { BillFees, BillItem, BillMember, ItemAssignment } from '@/lib/schemas'
 
@@ -27,7 +28,14 @@ export function AssignStep({
   onContinue,
   onBack,
 }: AssignStepProps) {
-  const [unitsMode, setUnitsMode] = useState<Record<string, boolean>>({})
+  // Items restored from a draft or an edit may already be split per portion.
+  const [unitsMode, setUnitsMode] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(
+      items
+        .filter((it) => (assignments[it.id] ?? []).some((a) => a.units !== undefined))
+        .map((it) => [it.id, true]),
+    ),
+  )
 
   const setItemAssignments = (itemId: string, list: ItemAssignment[]) => {
     const next = { ...assignments }
@@ -50,7 +58,19 @@ export function AssignStep({
     const current = assignments[itemId] ?? []
     setItemAssignments(
       itemId,
-      current.map((a) => (a.member_id === memberId ? { ...a, units: Math.max(0, units) } : a)),
+      current.map((a) => (a.member_id === memberId ? { ...a, units: Math.max(1, units) } : a)),
+    )
+  }
+
+  // Switching modes rewrites the item's assignments so the maths matches the UI:
+  // per-portion needs units on everyone, equal split needs none.
+  const toggleUnitsMode = (item: BillItem) => {
+    const next = !unitsMode[item.id]
+    setUnitsMode((prev) => ({ ...prev, [item.id]: next }))
+    const current = assignments[item.id] ?? []
+    setItemAssignments(
+      item.id,
+      current.map((a) => (next ? { member_id: a.member_id, units: a.units ?? 1 } : { member_id: a.member_id })),
     )
   }
 
@@ -59,7 +79,7 @@ export function AssignStep({
     if (a.length === 0) return { complete: false, unitsSum: 0 }
     if (unitsMode[item.id]) {
       const unitsSum = a.reduce((s, x) => s + (x.units ?? 0), 0)
-      return { complete: unitsSum === item.qty, unitsSum }
+      return { complete: unitsSum === item.qty && a.every((x) => (x.units ?? 0) > 0), unitsSum }
     }
     return { complete: true, unitsSum: 0 }
   }
@@ -79,7 +99,7 @@ export function AssignStep({
   }
 
   const result = useMemo(
-    () => computeSplit(items, fees, total, members, assignments),
+    () => computeSplit(items, withAdjustment(items, fees, total), total, members, assignments),
     [items, fees, total, members, assignments],
   )
 
@@ -88,7 +108,7 @@ export function AssignStep({
       <div className="flex flex-col gap-1">
         <h1 className="text-lg font-bold text-on-surface">Bagi Pesanan</h1>
         <p className="text-sm text-on-surface-variant">
-          Tandai siapa yang ikut tiap item. Biaya &amp; pajak dibagi otomatis sesuai porsi.
+          Tandai siapa yang ikut tiap item. Diskon, pajak, dan biaya lain dibagi sesuai porsi pesananmu.
         </p>
       </div>
 
@@ -109,6 +129,7 @@ export function AssignStep({
         </button>
       </div>
 
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-6">
       <div className="flex flex-col gap-3">
         {items.map((item) => {
           const assigned = assignments[item.id] ?? []
@@ -132,15 +153,14 @@ export function AssignStep({
                 </div>
                 <button
                   type="button"
-                  onClick={() =>
-                    setUnitsMode((prev) => ({ ...prev, [item.id]: !prev[item.id] }))
-                  }
+                  onClick={() => toggleUnitsMode(item)}
+                  aria-pressed={usesUnits}
                   disabled={item.qty < 2}
                   className={`shrink-0 px-2 py-1 rounded-lg text-[10px] font-semibold ${
                     usesUnits ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant'
                   } ${item.qty < 2 ? 'opacity-40' : ''}`}
                 >
-                  Per porsi
+                  Atur per porsi
                 </button>
               </div>
 
@@ -205,7 +225,7 @@ export function AssignStep({
       </div>
 
       {/* Live summary */}
-      <div className="bg-surface-container/70 rounded-2xl p-4 flex flex-col gap-2">
+      <div className="sticky bottom-3 lg:top-20 lg:bottom-auto z-10 bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-outline-variant/40 flex flex-col gap-2 max-h-[40dvh] lg:max-h-none overflow-y-auto">
         <span className="text-xs font-bold text-on-surface">Perkiraan per orang</span>
         {members.map((m) => (
           <div key={m.id} className="flex items-center justify-between text-xs">
@@ -219,9 +239,11 @@ export function AssignStep({
         ))}
       </div>
 
+      </div>
+
       {incomplete.length > 0 && (
         <p className="text-xs text-error font-medium">
-          {incomplete.length} item belum dibagi lengkap. Tandai dulu sebelum lanjut.
+          {incomplete.length} item belum dibagi. Tandai dulu sebelum lanjut.
         </p>
       )}
 

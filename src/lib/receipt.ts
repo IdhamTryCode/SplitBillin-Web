@@ -56,6 +56,14 @@ export function computeDraftTotals(
   return { net, computed }
 }
 
+/**
+ * Fees with `adjustment` pinned to whatever makes items + fees equal `total`
+ * (§4.3 step 5), so Σ member totals always equals the confirmed total.
+ */
+export function withAdjustment(items: BillItem[], fees: BillFees, total: number): BillFees {
+  return { ...fees, adjustment: total - computeDraftTotals(items, fees).computed }
+}
+
 export interface ReceiptBillDraft {
   merchant: string
   date: string | null

@@ -1,0 +1,4 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "ignorePatterns": ["stitch_splitbillin_ui_web_app*/", "scripts/", "results*/"]
+}

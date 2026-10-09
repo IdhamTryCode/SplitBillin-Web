@@ -15,7 +15,7 @@ export const ReceiptItemSchema = z.object({
 })
 
 export const OtherFeeSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1).max(60),
   amount: z.number().int(),
 })
 
@@ -72,7 +72,7 @@ export const BillFeesSchema = z.object({
 export const BillMemberSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1).max(60),
-  color: z.string(),
+  color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   is_payer: z.boolean().default(false),
   paid_at: z.string().nullable().default(null),
 })
@@ -97,7 +97,7 @@ export const PaymentInfoSchema = z.object({
 
 export const ManualSplitSchema = z.object({
   split: z.enum(['equal', 'amount', 'percent']),
-  values: z.record(z.string(), z.number()),
+  values: z.record(z.string(), z.number().min(0).finite()),
 })
 
 export const BillDataSchema = z.object({
@@ -112,6 +112,8 @@ export const BillDataSchema = z.object({
   assignments: z.record(z.string(), z.array(ItemAssignmentSchema)).default({}),
   manual: ManualSplitSchema.nullable().default(null),
   payment: PaymentInfoSchema.default(() => PaymentInfoSchema.parse({})),
+  // Set when the creator edits the bill after sharing it.
+  updated_at: z.string().nullable().default(null),
 })
 
 export type BillItem = z.infer<typeof BillItemSchema>
@@ -119,5 +121,6 @@ export type BillFees = z.infer<typeof BillFeesSchema>
 export type BillMember = z.infer<typeof BillMemberSchema>
 export type ItemAssignment = z.infer<typeof ItemAssignmentSchema>
 export type BillData = z.infer<typeof BillDataSchema>
+export type BillDataInput = z.input<typeof BillDataSchema>
 export type ManualSplit = z.infer<typeof ManualSplitSchema>
 export type PaymentInfo = z.infer<typeof PaymentInfoSchema>

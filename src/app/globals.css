@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Dark mode follows the `.dark` class set by next-themes, not the OS query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* ── Colors from DESIGN.md frontmatter ── */
   --color-primary: #006948;
@@ -60,13 +63,8 @@
   --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* ── Radius ── */
-  --radius-sm: 0.25rem;
-  --radius-DEFAULT: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 9999px;
+  /* Radius: Tailwind defaults already match the brief (buttons rounded-xl = 12px,
+     cards rounded-2xl = 16px, rounded-3xl = 24px). */
 
   /* ── Spacing ── */
   --spacing-gutter: 1rem;
@@ -102,11 +100,54 @@
   }
 }
 
-/* Dark mode overrides */
-.dark body,
-[data-theme='dark'] body {
-  color: var(--color-inverse-on-surface);
-  background-color: var(--color-dark-canvas);
+/* Dark mode: swap the tokens, so every `bg-surface*` / `text-on-*` utility
+   follows without per-component overrides (plan.md §5: canvas #0B0F17, card #131B2E). */
+.dark {
+  color-scheme: dark;
+
+  --color-primary: #4edea3;
+  --color-on-primary: #003824;
+  --color-primary-container: #00855d;
+  --color-on-primary-container: #f5fff7;
+
+  --color-secondary: #68dba9;
+  --color-on-secondary: #003824;
+  --color-secondary-container: #0b4a35;
+  --color-on-secondary-container: #85f8c4;
+
+  --color-tertiary: #ffb95f;
+  --color-on-tertiary: #452b00;
+
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #7a1218;
+  --color-on-error-container: #ffdad6;
+
+  --color-surface: #0b0f17;
+  --color-surface-dim: #0b0f17;
+  --color-surface-bright: #232f4c;
+  --color-surface-container-lowest: #131b2e;
+  --color-surface-container-low: #182238;
+  --color-surface-container: #1e2a44;
+  --color-surface-container-high: #263453;
+  --color-surface-container-highest: #2f3f63;
+  --color-surface-variant: #2f3f63;
+  --color-background: #0b0f17;
+
+  --color-on-surface: #e6e9f5;
+  --color-on-surface-variant: #a9b4c7;
+  --color-on-background: #e6e9f5;
+  --color-inverse-surface: #05070c;
+  --color-inverse-on-surface: #e6e9f5;
+
+  --color-outline: #8793a6;
+  --color-outline-variant: #334155;
+}
+
+input,
+select,
+textarea {
+  color-scheme: inherit;
 }
 
 @keyframes slideUp {
@@ -132,4 +173,32 @@
 
 .animate-scan-line {
   animation: scanLine 2.4s ease-in-out infinite;
+}
+
+/* Ticket edge: a row of half-circles cut out of the card (TicketCard). */
+.ticket-edge {
+  height: 8px;
+  background: radial-gradient(circle at 8px 100%, var(--color-surface) 5px, transparent 5.5px) 0 0 / 16px 8px repeat-x;
+}
+
+.ticket-edge-top {
+  transform: scaleY(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* iOS zooms the page when a focused field is under 16px. */
+@media (hover: none) and (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }

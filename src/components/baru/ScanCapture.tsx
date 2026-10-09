@@ -11,7 +11,7 @@ interface ScanCaptureProps {
 
 const TIPS = [
   { icon: '💡', text: 'Pastikan pencahayaan terang, hindari pantulan lampu.' },
-  { icon: '📄', text: 'Ratad kan struk, hindari lipatan tebal.' },
+  { icon: '📄', text: 'Ratakan struk, hindari lipatan tebal.' },
   { icon: '🔲', text: 'Seluruh struk masuk ke dalam frame.' },
 ]
 

@@ -50,6 +50,8 @@ export function ItemReview({
 
   const { net, computed } = computeDraftTotals(items, fees)
   const diff = total - computed
+  const diffResolved = diff !== 0 && fees.adjustment === diff
+  const blocked = items.length === 0 || (diff !== 0 && !diffResolved)
 
   const updateFee = (patch: Partial<BillFees>) => onFeesChange({ ...fees, ...patch })
 
@@ -114,20 +116,46 @@ export function ItemReview({
             <span className="font-mono font-bold">{formatIDR(total)}</span>
           </p>
         </div>
+      ) : diffResolved ? (
+        <div className="bg-secondary-container/30 rounded-xl p-3 flex flex-col gap-2 shadow-sm">
+          <p className="text-xs text-on-surface">
+            Pakai total dari struk <span className="font-mono font-bold">{formatIDR(total)}</span>. Selisih{' '}
+            <span className="font-mono font-bold">{formatIDR(Math.abs(diff))}</span> dibagi sesuai porsi tiap orang.
+          </p>
+          <button
+            type="button"
+            onClick={() => updateFee({ adjustment: 0 })}
+            className="self-start text-xs text-primary font-semibold"
+          >
+            Batalkan
+          </button>
+        </div>
       ) : (
         <div className="bg-amber-100 dark:bg-amber-950/40 rounded-xl p-3 flex flex-col gap-2 shadow-sm">
           <p className="text-xs text-on-surface">
             Ada selisih <span className="font-mono font-bold">{formatIDR(Math.abs(diff))}</span> antara item (
             <span className="font-mono">{formatIDR(computed)}</span>) dan total di struk (
-            <span className="font-mono">{formatIDR(total)}</span>).
+            <span className="font-mono">{formatIDR(total)}</span>). Cek item atau biaya di bawah.
           </p>
-          <button
-            type="button"
-            onClick={() => onTotalChange(computed)}
-            className="self-start px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold shadow-sm"
-          >
-            Pakai total terhitung
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => updateFee({ adjustment: diff })}
+              className="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold shadow-sm"
+            >
+              Pakai total dari struk
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                updateFee({ adjustment: 0 })
+                onTotalChange(computed)
+              }}
+              className="px-3 py-1.5 rounded-lg text-on-surface-variant text-xs font-semibold"
+            >
+              Pakai total terhitung
+            </button>
+          </div>
         </div>
       )}
 
@@ -277,7 +305,7 @@ export function ItemReview({
       {/* Summary */}
       <div className="bg-surface-container/60 rounded-2xl p-4 flex flex-col gap-2">
         <div className="flex items-center justify-between text-xs text-on-surface-variant">
-          <span>Subtotal Item (kotor)</span>
+          <span>Subtotal item</span>
           <span className="font-mono font-medium">{formatIDR(net)}</span>
         </div>
         <div className="flex items-center justify-between text-xs text-on-surface-variant">
@@ -305,10 +333,10 @@ export function ItemReview({
         <button
           type="button"
           onClick={onContinue}
-          disabled={items.length === 0}
+          disabled={blocked}
           className="flex-1 py-3 bg-primary text-on-primary font-semibold rounded-xl text-sm disabled:opacity-50"
         >
-          Lanjut →
+          {diff !== 0 && !diffResolved ? 'Selesaikan selisih dulu' : 'Lanjut →'}
         </button>
       </div>
       <button type="button" onClick={onManual} className="text-xs text-primary font-medium py-1 hover:underline">

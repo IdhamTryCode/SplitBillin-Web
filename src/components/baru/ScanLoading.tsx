@@ -7,23 +7,19 @@ import type { ScanFailure } from './types'
 interface ScanLoadingProps {
   previewUrl: string
   failure: ScanFailure | null
+  isGuest?: boolean
   onRetry: () => void
   onRescan: () => void
   onManual: () => void
   onCancel: () => void
 }
 
-const PHRASES = [
-  'Membaca struk…',
-  'Mengenali item…',
-  'Mendeteksi subtotal…',
-  'Menghitung pajak & servis…',
-  'Menghitung total akhir…',
-]
+const PHRASES = ['Membaca struk…', 'Mengenali item…', 'Menghitung total…']
 
 export function ScanLoading({
   previewUrl,
   failure,
+  isGuest,
   onRetry,
   onRescan,
   onManual,
@@ -46,6 +42,7 @@ export function ScanLoading({
     return (
       <ScanErrorState
         failure={failure}
+        isGuest={isGuest}
         onRetry={onRetry}
         onRescan={onRescan}
         onManual={onManual}
@@ -72,7 +69,7 @@ export function ScanLoading({
             <p className="text-sm font-semibold text-on-surface">{PHRASES[phraseIndex]}</p>
           </div>
           <span className="font-mono text-xs text-on-surface-variant font-semibold">
-            00:{String(seconds).padStart(2, '0')}s
+            00:{String(seconds).padStart(2, '0')}
           </span>
         </div>
       </div>

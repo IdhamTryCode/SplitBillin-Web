@@ -15,7 +15,8 @@ export type ScanOutcome =
   | { ok: true; receipt: ReceiptData }
   | { ok: false; code: ScanErrorCode }
 
-const TIMEOUT_MS = 45_000
+// Stays under the route's maxDuration (30 s); a scan normally takes 2–9 s.
+const TIMEOUT_MS = 25_000
 const DEFAULT_BASE_URL = 'https://kenari.id/v1'
 const DEFAULT_MODEL = 'gemini-3-1-flash-lite'
 

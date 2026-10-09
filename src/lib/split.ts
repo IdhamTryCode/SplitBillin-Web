@@ -32,7 +32,7 @@ export function largestRemainder(total: number, weights: number[]): number[] {
 
   const exact = weights.map((w) => (total * w) / sum)
   const floored = exact.map(Math.floor)
-  let remainder = total - floored.reduce((a, b) => a + b, 0)
+  const remainder = total - floored.reduce((a, b) => a + b, 0)
 
   // Urutkan index berdasarkan sisa pecahan terbesar; tie-break oleh index
   const indices = exact

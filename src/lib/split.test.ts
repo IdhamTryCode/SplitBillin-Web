@@ -4,7 +4,6 @@ import {
   largestRemainder,
   splitEqual,
   computeSplit,
-  computeManualSplit,
 } from './split'
 import type { BillItem, BillFees, BillMember, ItemAssignment } from './schemas'
 
