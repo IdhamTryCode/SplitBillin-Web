@@ -6,28 +6,13 @@ import { DraftChip, HomeHistory } from '@/components/HomeLocal'
 
 export const metadata: Metadata = { alternates: { canonical: '/' } }
 
-const CHOICES = [
-  {
-    href: '/baru?mode=scan',
-    icon: '📸',
-    title: 'Hitung otomatis pake struk',
-    description: 'Foto struk atau ambil dari galeri, biar kami bantu itungin.',
-  },
-  {
-    href: '/baru?mode=manual',
-    icon: '🧮',
-    title: 'Atur jumlahnya sendiri',
-    description: 'Lebih cepat buat bagi rata, gak usah pake struk.',
-  },
-]
-
 export default function Home() {
   return (
     <AppShell width="wide">
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:gap-10 lg:items-start">
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2 pt-1">
-            <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-on-surface">
+            <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">
               Split bill gratis, tanpa ribet.
             </h1>
             <p className="text-sm text-on-surface-variant">
@@ -46,24 +31,48 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-3">
-            {CHOICES.map((c) => (
-              <Link
-                key={c.href}
-                href={c.href}
-                className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex items-start gap-4 active:scale-[0.99] transition-transform"
+            {/* Primary action: the one thing most visitors came to do. */}
+            <Link
+              href="/baru?mode=scan"
+              className="group bg-primary text-on-primary rounded-2xl p-5 shadow-lg shadow-primary/25 flex items-center gap-4 active:scale-[0.99] transition-transform"
+            >
+              <span
+                className="w-14 h-14 rounded-2xl bg-on-primary/15 flex items-center justify-center text-3xl shrink-0"
+                aria-hidden
               >
-                <span
-                  className="w-12 h-12 rounded-2xl bg-secondary-container/50 flex items-center justify-center text-2xl shrink-0"
-                  aria-hidden
-                >
-                  {c.icon}
+                📸
+              </span>
+              <span className="flex-1">
+                <span className="block text-lg font-extrabold leading-tight">Mulai split bill sekarang</span>
+                <span className="block text-xs opacity-90 mt-1">
+                  Foto struk atau ambil dari galeri, biar kami bantu itungin.
                 </span>
-                <span className="flex-1">
-                  <span className="block font-bold text-on-surface">{c.title}</span>
-                  <span className="block text-xs text-on-surface-variant mt-1">{c.description}</span>
+              </span>
+              <span aria-hidden className="text-2xl transition-transform group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+
+            <Link
+              href="/baru?mode=manual"
+              className="bg-surface-container-lowest rounded-2xl px-5 py-4 shadow-sm border border-outline-variant/30 flex items-center gap-4 active:scale-[0.99] transition-transform"
+            >
+              <span
+                className="w-10 h-10 rounded-xl bg-secondary-container/50 flex items-center justify-center text-xl shrink-0"
+                aria-hidden
+              >
+                🧮
+              </span>
+              <span className="flex-1">
+                <span className="block text-sm font-bold text-on-surface">Gak punya struk? Atur jumlahnya sendiri</span>
+                <span className="block text-xs text-on-surface-variant mt-0.5">
+                  Lebih cepat buat bagi rata.
                 </span>
-              </Link>
-            ))}
+              </span>
+              <span aria-hidden className="text-on-surface-variant">
+                →
+              </span>
+            </Link>
           </div>
 
           <DraftChip />
