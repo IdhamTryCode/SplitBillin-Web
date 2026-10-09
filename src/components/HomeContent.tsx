@@ -144,6 +144,29 @@ export function HomeContent() {
         </Link>
         <p className="text-[11px] text-on-surface-variant">Gratis, tanpa daftar.</p>
       </div>
+
+      <section aria-labelledby="panduan" className="flex flex-col gap-3 border-t border-outline-variant/40 pt-6">
+        <h2 id="panduan" className="text-lg font-bold text-on-surface">
+          Panduan
+        </h2>
+        <ul className="flex flex-col gap-2 text-sm">
+          <li>
+            <Link href="/panduan/cara-split-bill" className="text-primary underline underline-offset-2">
+              Cara bagi tagihan restoran secara adil
+            </Link>
+          </li>
+          <li>
+            <Link href="/panduan/split-bill-gratis" className="text-primary underline underline-offset-2">
+              Pakai SplitBillin gratis, tanpa daftar
+            </Link>
+          </li>
+          <li>
+            <Link href="/panduan/hitung-patungan-dari-struk" className="text-primary underline underline-offset-2">
+              Hitung patungan dari struk secara otomatis
+            </Link>
+          </li>
+        </ul>
+      </section>
     </div>
   )
 }
