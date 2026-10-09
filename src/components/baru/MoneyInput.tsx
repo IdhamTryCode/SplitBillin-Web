@@ -36,14 +36,12 @@ export function MoneyInput({
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     setDraft(value === 0 ? '' : String(value))
     setFocused(true)
+    // Select the whole amount once the raw digits are rendered, so typing
+    // replaces it. Collapsing the caret to the end instead made new digits
+    // append to the old number (e.g. tabbing in and typing "500" → "123600500").
     const el = e.currentTarget
     requestAnimationFrame(() => {
-      const end = el.value.length
-      try {
-        el.setSelectionRange(end, end)
-      } catch {
-        /* setSelectionRange not supported on this input */
-      }
+      if (document.activeElement === el) el.select()
     })
   }
 

@@ -57,7 +57,7 @@ export function SuccessScreen({ created, merchant, onNew }: SuccessScreenProps) 
             type="button"
             onClick={() => copy('share', shareUrl)}
             aria-label="Salin link untuk dibagikan"
-            className="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-surface-container text-on-surface active:scale-95 transition-transform"
+            className="shrink-0 w-11 h-11 flex items-center justify-center rounded-lg bg-surface-container text-on-surface active:scale-95 transition-transform"
           >
             {copied === 'share' ? <CheckIcon className="w-4 h-4 text-primary" /> : <CopyIcon className="w-4 h-4" />}
           </button>
@@ -94,7 +94,7 @@ export function SuccessScreen({ created, merchant, onNew }: SuccessScreenProps) 
                 type="button"
                 onClick={() => copy('manage', manageUrl)}
                 aria-label="Salin link kelola"
-                className="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-surface-container text-on-surface active:scale-95 transition-transform"
+                className="shrink-0 w-11 h-11 flex items-center justify-center rounded-lg bg-surface-container text-on-surface active:scale-95 transition-transform"
               >
                 {copied === 'manage' ? <CheckIcon className="w-4 h-4 text-primary" /> : <CopyIcon className="w-4 h-4" />}
               </button>
