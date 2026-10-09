@@ -38,3 +38,6 @@ design-brief.md
 *.pem
 .vscode/
 .idea/
+
+# Working notes from audits
+AUDIT-*.md

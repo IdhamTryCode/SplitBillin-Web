@@ -72,7 +72,8 @@ export function AppHeader() {
         <div className="flex items-center gap-1">
           <Link
             href="/tentang"
-            className="px-2 h-11 flex items-center text-xs font-semibold text-on-surface-variant hover:text-on-surface"
+            // On the narrowest phones the logo needs the room; Tentang stays reachable from Pengaturan.
+            className="max-[359px]:hidden px-2 h-11 flex items-center text-xs font-semibold text-on-surface-variant hover:text-on-surface"
           >
             Tentang
           </Link>

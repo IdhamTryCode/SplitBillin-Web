@@ -30,7 +30,7 @@ export default function SplitBillGratisPage() {
       <InfoSection title="Tanpa daftar: apa artinya untukmu">
         <p>
           Kamu tidak perlu mengetik email, membuat kata sandi, atau memverifikasi nomor HP. Buka halaman, buat split
-          bill, lalu bagikan. Saat pertama kali kamu membuat bill sebagai tamu, kamu akan mendapat satu link kelola
+          bill, lalu bagikan. Setiap kali kamu membuat bill sebagai tamu, kamu akan mendapat satu link kelola
           rahasia — simpan link itu baik-baik, karena hanya dengan link itu kamu bisa mengubah dan menandai lunas.
         </p>
         <p>
