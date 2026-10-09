@@ -33,7 +33,7 @@ export function MemberChip({ member, selected, onClick, disabled, className }: M
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all',
+        'inline-flex items-center gap-1.5 h-11 px-3 rounded-full text-xs font-medium transition-all',
         selected
           ? 'bg-primary text-on-primary shadow-sm'
           : 'bg-surface-container dark:bg-slate-800 text-on-surface-variant',

@@ -156,7 +156,7 @@ export function AssignStep({
                   onClick={() => toggleUnitsMode(item)}
                   aria-pressed={usesUnits}
                   disabled={item.qty < 2}
-                  className={`shrink-0 px-2 py-1 rounded-lg text-[10px] font-semibold ${
+                  className={`shrink-0 h-11 px-3 rounded-lg text-[11px] font-semibold ${
                     usesUnits ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant'
                   } ${item.qty < 2 ? 'opacity-40' : ''}`}
                 >
@@ -182,23 +182,25 @@ export function AssignStep({
                     if (!member) return null
                     return (
                       <div key={a.member_id} className="flex items-center justify-between gap-2">
-                        <span className="text-xs text-on-surface flex items-center gap-1.5">
+                        <span className="min-w-0 text-xs text-on-surface flex items-center gap-1.5">
                           <MemberAvatar member={member} className="w-4 h-4 text-[9px]" />
-                          {member.name}
+                          <span className="truncate">{member.name}</span>
                         </span>
-                        <div className="flex items-center gap-2">
+                        <div className="shrink-0 flex items-center gap-2">
                           <button
                             type="button"
+                            aria-label={`Kurangi porsi ${member.name}`}
                             onClick={() => setUnits(item.id, a.member_id, (a.units ?? 1) - 1)}
-                            className="w-7 h-7 rounded-lg bg-surface-container text-on-surface font-bold"
+                            className="w-11 h-11 rounded-lg bg-surface-container text-on-surface font-bold"
                           >
                             −
                           </button>
                           <span className="font-mono text-sm w-6 text-center">{a.units ?? 0}</span>
                           <button
                             type="button"
+                            aria-label={`Tambah porsi ${member.name}`}
                             onClick={() => setUnits(item.id, a.member_id, (a.units ?? 1) + 1)}
-                            className="w-7 h-7 rounded-lg bg-surface-container text-on-surface font-bold"
+                            className="w-11 h-11 rounded-lg bg-surface-container text-on-surface font-bold"
                           >
                             +
                           </button>
@@ -232,7 +234,7 @@ export function AssignStep({
             <span className="flex items-center gap-1.5 text-on-surface">
               <MemberAvatar member={m} className="w-4 h-4 text-[9px]" />
               {m.name}
-              {m.is_payer && <span className="text-[10px] text-on-surface-variant">(penalang)</span>}
+              {m.is_payer && <span className="text-[10px] text-on-surface-variant">(nalangin)</span>}
             </span>
             <span className="font-mono font-semibold text-on-surface">{formatIDR(result.memberTotals[m.id] ?? 0)}</span>
           </div>

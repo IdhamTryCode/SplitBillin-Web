@@ -217,7 +217,7 @@ export function ManageView({ bill: initial, token }: ManageViewProps) {
                         onClick={() => togglePaid(m.id)}
                         disabled={busy !== null}
                         aria-pressed={settled}
-                        className={`px-3 h-10 rounded-lg text-xs font-semibold disabled:opacity-60 ${
+                        className={`px-3 h-11 rounded-lg text-xs font-semibold disabled:opacity-60 ${
                           settled
                             ? 'bg-secondary-container text-on-secondary-container'
                             : 'bg-primary text-on-primary'
@@ -231,7 +231,7 @@ export function ManageView({ bill: initial, token }: ManageViewProps) {
                         href={`https://wa.me/?text=${waText}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 h-10 flex items-center bg-surface-container text-on-surface rounded-lg text-xs font-semibold"
+                        className="px-3 h-11 flex items-center bg-surface-container text-on-surface rounded-lg text-xs font-semibold"
                       >
                         Tagih via WA
                       </a>
@@ -241,7 +241,7 @@ export function ManageView({ bill: initial, token }: ManageViewProps) {
                         type="button"
                         onClick={() => setOpen((prev) => ({ ...prev, [m.id]: !prev[m.id] }))}
                         aria-expanded={expanded}
-                        className="px-1 h-10 text-[11px] text-on-surface-variant underline underline-offset-2"
+                        className="px-2 h-11 text-[11px] text-on-surface-variant underline underline-offset-2"
                       >
                         Rincian {expanded ? '▴' : '▾'}
                       </button>

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useDialog } from '@/lib/use-dialog'
 import { TicketCard, TicketNotchDivider } from '@/components/TicketCard'
 import type { BreakdownLine } from '@/lib/breakdown'
 import { formatDate } from '@/lib/format'
@@ -168,6 +169,7 @@ export function PaymentCard({ payment, qrisUrl, masked }: PaymentCardProps) {
   const [revealed, setRevealed] = useState<Record<number, boolean>>({})
   const [zoom, setZoom] = useState(false)
   const [copied, copy] = useCopied()
+  const qrisPanelRef = useDialog(zoom, () => setZoom(false))
 
   if (payment.methods.length === 0 && !qrisUrl && !payment.note) {
     return (
@@ -198,7 +200,7 @@ export function PaymentCard({ payment, qrisUrl, masked }: PaymentCardProps) {
                   type="button"
                   onClick={() => setRevealed((prev) => ({ ...prev, [idx]: !prev[idx] }))}
                   aria-label={show ? 'Sembunyikan nomor' : 'Tampilkan nomor lengkap'}
-                  className="font-mono text-sm text-on-surface py-1.5 text-left"
+                  className="font-mono text-sm text-on-surface h-11 flex items-center text-left"
                 >
                   {show ? pm.number : maskNumber(pm.number)}{' '}
                   <span className="font-sans text-[11px] text-primary font-semibold">{show ? 'Tutup' : 'Lihat'}</span>
@@ -211,7 +213,7 @@ export function PaymentCard({ payment, qrisUrl, masked }: PaymentCardProps) {
             <button
               type="button"
               onClick={() => copy(`n${idx}`, pm.number)}
-              className="shrink-0 px-3 h-10 bg-surface-container text-on-surface rounded-lg text-xs font-semibold"
+              className="shrink-0 px-3 h-11 bg-surface-container text-on-surface rounded-lg text-xs font-semibold"
             >
               {copied === `n${idx}` ? 'Tersalin' : 'Salin nomor'}
             </button>
@@ -251,12 +253,20 @@ export function PaymentCard({ payment, qrisUrl, masked }: PaymentCardProps) {
 
       {zoom && qrisUrl && (
         <div
+          ref={qrisPanelRef}
           role="dialog"
           aria-modal="true"
           aria-label="QRIS"
+          tabIndex={-1}
           className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center p-4 gap-4"
         >
-          <button type="button" aria-label="Tutup" onClick={() => setZoom(false)} className="absolute inset-0" />
+          <button
+            type="button"
+            aria-hidden
+            tabIndex={-1}
+            onClick={() => setZoom(false)}
+            className="absolute inset-0"
+          />
           <div className="relative bg-white rounded-2xl p-3 max-w-sm w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrisUrl} alt="QRIS" className="w-full h-auto max-h-[70dvh] object-contain" />
@@ -264,7 +274,7 @@ export function PaymentCard({ payment, qrisUrl, masked }: PaymentCardProps) {
           <button
             type="button"
             onClick={() => setZoom(false)}
-            className="relative px-6 py-3 rounded-xl bg-surface-container-lowest text-on-surface text-sm font-semibold"
+            className="relative px-6 h-11 rounded-xl bg-surface-container-lowest text-on-surface text-sm font-semibold"
           >
             Tutup
           </button>

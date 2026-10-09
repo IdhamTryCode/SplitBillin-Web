@@ -64,12 +64,13 @@ export function ManualSplitStep({
         <div className="flex flex-col gap-2">
           {members.map((m) => (
             <div key={m.id} className="flex items-center justify-between gap-2">
-              <span className="text-xs font-medium text-on-surface">{m.name}</span>
+              <span className="min-w-0 truncate text-xs font-medium text-on-surface">{m.name}</span>
               {manual.split === 'amount' ? (
                 <MoneyInput
                   value={manual.values[m.id] ?? 0}
                   onChange={(v) => setValue(m.id, v)}
                   placeholder="0"
+                  ariaLabel={`Nominal untuk ${m.name}`}
                   className="w-32 p-2 rounded-lg bg-surface-container-low border border-slate-200 dark:border-slate-800 text-right text-xs"
                 />
               ) : (
@@ -81,6 +82,7 @@ export function ManualSplitStep({
                     value={manual.values[m.id] ?? ''}
                     onChange={(e) => setValue(m.id, Number(e.target.value))}
                     placeholder="0"
+                    aria-label={`Persen untuk ${m.name}`}
                     className="w-20 p-2 rounded-lg bg-surface-container-low border border-slate-200 dark:border-slate-800 text-right font-mono text-xs"
                   />
                   <span className="text-xs text-on-surface-variant">%</span>

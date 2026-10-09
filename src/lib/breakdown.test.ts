@@ -42,7 +42,7 @@ const delivery = bill({
 })
 
 describe('summarizeBill', () => {
-  it('data uji §6: penalang otomatis lunas, belum lunas = 21.750', () => {
+  it('data uji §6: yang nalangin otomatis lunas, belum lunas = 21.750', () => {
     const res = summarizeBill(
       bill({
         mode: 'manual',
@@ -98,7 +98,7 @@ describe('validateBill', () => {
     ).toMatch(/anggota yang tidak ada/)
   })
 
-  it('menolak dua penalang', () => {
+  it('menolak dua orang yang nalangin', () => {
     const two = delivery.members.map((m) => ({ ...m, is_payer: true }))
     expect(validateBill({ ...delivery, members: two })).toMatch(/satu orang/)
   })

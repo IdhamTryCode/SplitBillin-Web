@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useId, useState } from 'react'
 import { ItemEditorSheet } from './ItemEditorSheet'
+import { useDialog } from '@/lib/use-dialog'
 import { MoneyInput } from './MoneyInput'
 import { formatIDR } from '@/lib/money'
 import { computeDraftTotals } from '@/lib/receipt'
@@ -47,6 +48,8 @@ export function ItemReview({
 }: ItemReviewProps) {
   const [editing, setEditing] = useState<BillItem | null>(null)
   const [showZoom, setShowZoom] = useState(false)
+  const zoomTitleId = useId()
+  const zoomPanelRef = useDialog(showZoom, () => setShowZoom(false))
 
   const { net, computed } = computeDraftTotals(items, fees)
   const diff = total - computed
@@ -97,14 +100,15 @@ export function ItemReview({
             placeholder="Nama tempat"
             aria-label="Nama tempat"
             aria-invalid={merchantMissing}
-            className="bg-transparent font-bold text-sm text-on-surface focus:outline-none w-full"
+            className="bg-transparent font-bold text-sm text-on-surface w-full rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           />
           {merchantMissing && <span className="text-[11px] text-error">Nama tempat wajib diisi dulu.</span>}
           <input
             type="date"
             value={date}
             onChange={(e) => onDateChange(e.target.value)}
-            className="bg-transparent text-xs text-on-surface-variant focus:outline-none w-full"
+            aria-label="Tanggal struk"
+            className="bg-transparent text-xs text-on-surface-variant w-full rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           />
         </div>
       </div>
@@ -145,7 +149,7 @@ export function ItemReview({
             <button
               type="button"
               onClick={() => updateFee({ adjustment: diff })}
-              className="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold shadow-sm"
+              className="px-4 h-11 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold shadow-sm"
             >
               Pakai total dari struk
             </button>
@@ -155,7 +159,7 @@ export function ItemReview({
                 updateFee({ adjustment: 0 })
                 onTotalChange(computed)
               }}
-              className="px-3 py-1.5 rounded-lg text-on-surface-variant text-xs font-semibold"
+              className="px-4 h-11 rounded-lg text-on-surface-variant text-xs font-semibold"
             >
               Pakai total terhitung
             </button>
@@ -226,6 +230,7 @@ export function ItemReview({
           <MoneyInput
             value={fees.discount}
             onChange={(v) => updateFee({ discount: v })}
+            ariaLabel="Diskon atau voucher struk"
             className="w-28 p-2 rounded-lg bg-surface-container text-right text-sm"
           />
         </div>
@@ -235,6 +240,7 @@ export function ItemReview({
           <MoneyInput
             value={fees.service}
             onChange={(v) => updateFee({ service: v })}
+            ariaLabel="Service charge"
             className="w-28 p-2 rounded-lg bg-surface-container text-right text-sm"
           />
         </div>
@@ -245,6 +251,7 @@ export function ItemReview({
             <MoneyInput
               value={fees.tax}
               onChange={(v) => updateFee({ tax: v })}
+              ariaLabel="Pajak PB1 atau PPN"
               className="w-28 p-2 rounded-lg bg-surface-container-lowest text-right text-sm"
             />
           </div>
@@ -268,6 +275,7 @@ export function ItemReview({
                 onChange={(e) =>
                   updateFee({ other: fees.other.map((f, i) => (i === idx ? { ...f, name: e.target.value } : f)) })
                 }
+                aria-label="Nama biaya lain"
                 className="flex-1 p-2 rounded-lg bg-surface-container text-xs text-on-surface"
               />
               <MoneyInput
@@ -275,6 +283,7 @@ export function ItemReview({
                 onChange={(v) =>
                   updateFee({ other: fees.other.map((f, i) => (i === idx ? { ...f, amount: v } : f)) })
                 }
+                ariaLabel="Jumlah biaya lain"
                 className="w-24 p-2 rounded-lg bg-surface-container text-right text-sm"
               />
               <button
@@ -301,6 +310,7 @@ export function ItemReview({
             value={fees.rounding}
             onChange={(v) => updateFee({ rounding: v })}
             allowNegative
+            ariaLabel="Pembulatan kasir"
             className="w-28 p-2 rounded-lg bg-surface-container text-right text-sm"
           />
         </div>
@@ -321,7 +331,8 @@ export function ItemReview({
           <MoneyInput
             value={total}
             onChange={onTotalChange}
-            className="w-32 text-right text-lg font-bold text-primary bg-transparent focus:outline-none"
+            ariaLabel="Total di struk"
+            className="w-32 text-right text-lg font-bold text-primary bg-transparent rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           />
         </div>
       </div>
@@ -360,14 +371,24 @@ export function ItemReview({
       />
 
       {showZoom && previewUrl && (
-        <div className="fixed inset-0 z-50 bg-inverse-surface/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div
+          ref={zoomPanelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={zoomTitleId}
+          tabIndex={-1}
+          className="fixed inset-0 z-50 bg-inverse-surface/80 backdrop-blur-md flex items-center justify-center p-4"
+        >
           <div className="bg-surface-container-lowest rounded-2xl max-w-sm w-full p-4 flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold text-on-surface">Foto Struk Asli</span>
+            <div className="flex items-center justify-between gap-2">
+              <h2 id={zoomTitleId} className="text-sm font-bold text-on-surface">
+                Foto Struk Asli
+              </h2>
               <button
                 type="button"
                 onClick={() => setShowZoom(false)}
-                className="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant"
+                aria-label="Tutup"
+                className="w-11 h-11 -mr-2 rounded-full bg-surface-container text-on-surface-variant"
               >
                 ✕
               </button>

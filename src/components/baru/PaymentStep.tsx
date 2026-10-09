@@ -114,7 +114,7 @@ export function PaymentStep({
                 type="button"
                 aria-pressed={method.kind === k.key}
                 onClick={() => setMethod(idx, { kind: k.key })}
-                className={`px-3 h-9 rounded-full text-xs font-semibold ${
+                className={`px-3 h-11 rounded-full text-xs font-semibold ${
                   method.kind === k.key
                     ? 'bg-primary text-on-primary'
                     : 'bg-surface-container-lowest text-on-surface-variant'
@@ -127,7 +127,7 @@ export function PaymentStep({
               type="button"
               onClick={() => removeMethod(idx)}
               aria-label={`Hapus cara bayar ${idx + 1}`}
-              className="ml-auto w-9 h-9 text-error text-sm"
+              className="ml-auto w-11 h-11 text-error text-sm"
             >
               ✕
             </button>
@@ -140,7 +140,7 @@ export function PaymentStep({
                   key={p}
                   type="button"
                   onClick={() => setMethod(idx, { provider: p })}
-                  className={`shrink-0 px-2.5 h-8 rounded-lg text-[11px] font-semibold ${
+                  className={`shrink-0 px-3 h-11 rounded-lg text-xs font-semibold ${
                     method.provider === p
                       ? 'bg-secondary-container text-on-secondary-container'
                       : 'bg-surface-container-lowest text-on-surface-variant'
@@ -204,11 +204,11 @@ export function PaymentStep({
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="h-10 text-left text-xs text-primary font-semibold"
+                className="h-11 text-left text-xs text-primary font-semibold"
               >
                 Ganti gambar
               </button>
-              <button type="button" onClick={removeQris} className="h-10 text-left text-xs text-error font-semibold">
+              <button type="button" onClick={removeQris} className="h-11 text-left text-xs text-error font-semibold">
                 Hapus
               </button>
             </div>

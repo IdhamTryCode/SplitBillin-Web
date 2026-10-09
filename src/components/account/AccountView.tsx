@@ -201,7 +201,7 @@ export function AccountView({ profile, initialFriends, guestQuota, userQuota }: 
               {friends.map((f) => (
                 <li
                   key={f.id}
-                  className="inline-flex items-center gap-1 pl-3 pr-1 h-10 rounded-full bg-surface-container text-xs font-semibold text-on-surface"
+                  className="inline-flex items-center gap-1 pl-3 pr-1 h-11 rounded-full bg-surface-container text-xs font-semibold text-on-surface"
                 >
                   {f.name}
                   <button
@@ -209,7 +209,7 @@ export function AccountView({ profile, initialFriends, guestQuota, userQuota }: 
                     onClick={() => removeFriend(f.id)}
                     disabled={busy !== null}
                     aria-label={`Hapus ${f.name}`}
-                    className="w-8 h-8 rounded-full text-on-surface-variant"
+                    className="w-11 h-11 rounded-full text-on-surface-variant"
                   >
                     ✕
                   </button>

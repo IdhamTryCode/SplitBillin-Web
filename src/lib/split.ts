@@ -71,7 +71,7 @@ export interface SplitResult {
   memberItemDetails: Record<string, Record<string, number>>
   /** Total yang dihitung dari item + biaya (tanpa adjustment). */
   computed: number
-  /** Jumlah belum dibayar (anggota bukan penalang dan belum paid_at). */
+  /** Jumlah belum dibayar (anggota bukan nalangin dan belum paid_at). */
   unpaid: number
 }
 

@@ -82,7 +82,7 @@ export function AppHeader() {
             <Link
               href="/akun"
               aria-label="Akun"
-              className="w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center text-sm font-bold"
+              className="w-11 h-11 rounded-full bg-primary text-on-primary flex items-center justify-center text-sm font-bold"
             >
               {initial}
             </Link>
@@ -90,7 +90,7 @@ export function AppHeader() {
             <Link
               href={`/masuk?next=${encodeURIComponent(pathname)}`}
               className={cn(
-                'px-3 h-9 flex items-center rounded-full bg-surface-container text-on-surface text-xs font-semibold',
+                'px-3 h-11 flex items-center rounded-full bg-surface-container text-on-surface text-xs font-semibold',
                 !ready && 'invisible',
               )}
             >
@@ -147,8 +147,16 @@ interface AppShellProps {
 export function AppShell({ children, nav = true, width = 'narrow', className }: AppShellProps) {
   return (
     <div className="min-h-dvh flex flex-col bg-surface">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-surface-container-lowest focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-on-surface focus:shadow-lg"
+      >
+        Lewati ke konten utama
+      </a>
       <AppHeader />
       <main
+        id="main"
+        tabIndex={-1}
         className={cn(
           'flex-1 w-full mx-auto px-4 pt-5',
           width === 'wide' ? 'max-w-[480px] lg:max-w-[1040px]' : 'max-w-[480px]',

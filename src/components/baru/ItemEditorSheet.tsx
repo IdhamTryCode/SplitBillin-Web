@@ -37,8 +37,11 @@ export function ItemEditorSheet({ open, item, onSave, onDelete, onClose }: ItemE
     <BottomSheet open={open} title="Ubah Item" onClose={onClose}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <label className="text-xs font-medium text-on-surface-variant">Nama Item</label>
+          <label htmlFor="item-name" className="text-xs font-medium text-on-surface-variant">
+            Nama Item
+          </label>
           <input
+            id="item-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -51,16 +54,18 @@ export function ItemEditorSheet({ open, item, onSave, onDelete, onClose }: ItemE
           <div className="flex items-center gap-3">
             <button
               type="button"
+              aria-label="Kurangi jumlah"
               onClick={() => setQty((q) => Math.max(1, q - 1))}
-              className="w-10 h-10 rounded-xl bg-surface-container text-on-surface text-lg font-bold"
+              className="w-11 h-11 rounded-xl bg-surface-container text-on-surface text-lg font-bold"
             >
               −
             </button>
             <span className="flex-1 text-center font-mono text-lg font-bold text-on-surface">{qty}</span>
             <button
               type="button"
+              aria-label="Tambah jumlah"
               onClick={() => setQty((q) => q + 1)}
-              className="w-10 h-10 rounded-xl bg-surface-container text-on-surface text-lg font-bold"
+              className="w-11 h-11 rounded-xl bg-surface-container text-on-surface text-lg font-bold"
             >
               +
             </button>
@@ -73,6 +78,7 @@ export function ItemEditorSheet({ open, item, onSave, onDelete, onClose }: ItemE
             value={unitPrice}
             onChange={setUnitPrice}
             placeholder="0"
+            ariaLabel="Harga satuan"
             className="w-32 p-2.5 rounded-xl bg-surface-container-low border border-slate-200 dark:border-slate-800 text-right text-sm"
           />
         </div>
@@ -83,6 +89,7 @@ export function ItemEditorSheet({ open, item, onSave, onDelete, onClose }: ItemE
             value={discount}
             onChange={setDiscount}
             placeholder="0"
+            ariaLabel="Potongan item"
             className="w-32 p-2.5 rounded-xl bg-surface-container-low border border-slate-200 dark:border-slate-800 text-right text-sm"
           />
         </div>

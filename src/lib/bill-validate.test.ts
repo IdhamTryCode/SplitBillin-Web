@@ -60,7 +60,7 @@ describe('validateBill — setiap cabang penolakan', () => {
     expect(validateBill(receipt({ members: many }))).toMatch(new RegExp(`Maksimal ${MAX_MEMBERS} anggota`))
   })
 
-  it('anggota: bukan tepat satu penalang', () => {
+  it('anggota: bukan tepat satu yang nalangin', () => {
     const none = receipt({ members: members.map((m) => ({ ...m, is_payer: false })) })
     const two = receipt({ members: members.map((m) => ({ ...m, is_payer: true })) })
     expect(validateBill(none)).toMatch(/satu orang/)

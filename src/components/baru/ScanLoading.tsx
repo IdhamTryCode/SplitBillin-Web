@@ -52,6 +52,7 @@ export function ScanLoading({
 
   return (
     <div className="flex flex-col gap-4">
+      <h1 className="sr-only">Memindai struk</h1>
       <div className="bg-surface-container-lowest dark:bg-dark-card rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
         <div className="relative w-full aspect-[3/4] bg-surface-container overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -62,13 +63,15 @@ export function ScanLoading({
 
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="relative flex h-3 w-3">
+            <span className="relative flex h-3 w-3" aria-hidden>
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
             </span>
-            <p className="text-sm font-semibold text-on-surface">{PHRASES[phraseIndex]}</p>
+            <p className="text-sm font-semibold text-on-surface" aria-live="polite">
+              {PHRASES[phraseIndex]}
+            </p>
           </div>
-          <span className="font-mono text-xs text-on-surface-variant font-semibold">
+          <span className="font-mono text-xs text-on-surface-variant font-semibold" aria-hidden>
             00:{String(seconds).padStart(2, '0')}
           </span>
         </div>
@@ -81,14 +84,15 @@ export function ScanLoading({
       {seconds >= 15 && (
         <div className="bg-surface-container-high rounded-2xl p-4 flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <span className="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-lg shrink-0">
+            <span
+              className="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-lg shrink-0"
+              aria-hidden
+            >
               ⌛
             </span>
             <div>
-              <h4 className="text-sm font-semibold text-on-surface">Lebih lama dari biasanya…</h4>
-              <p className="text-xs text-on-surface-variant">
-                Kamu bisa menunggu, atau langsung isi manual saja.
-              </p>
+              <h2 className="text-sm font-semibold text-on-surface">Lebih lama dari biasanya…</h2>
+              <p className="text-xs text-on-surface-variant">Kamu bisa menunggu, atau langsung isi manual saja.</p>
             </div>
           </div>
           <button

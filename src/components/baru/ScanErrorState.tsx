@@ -92,13 +92,19 @@ export function ScanErrorState({ failure, isGuest, onRetry, onRescan, onManual }
 
   return (
     <div className="bg-surface-container-lowest dark:bg-dark-card rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center gap-3">
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${TONE_CLASS[copy.tone]}`} aria-hidden>
+      <div
+        className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${TONE_CLASS[copy.tone]}`}
+        aria-hidden
+      >
         {copy.icon}
       </div>
-      <h2 className="text-lg font-bold text-on-surface">{copy.title}</h2>
+      <h1 className="text-lg font-bold text-on-surface">{copy.title}</h1>
       <p className="text-sm text-on-surface-variant">{copy.body}</p>
       {isGuest && failure.code === 'rate_limited' && (
-        <Link href="/masuk?next=/baru%3Fmode%3Dscan" className="text-xs text-primary font-semibold underline underline-offset-2 py-1">
+        <Link
+          href="/masuk?next=/baru%3Fmode%3Dscan"
+          className="text-xs text-primary font-semibold underline underline-offset-2 py-1"
+        >
           Masuk untuk kuota lebih banyak
         </Link>
       )}

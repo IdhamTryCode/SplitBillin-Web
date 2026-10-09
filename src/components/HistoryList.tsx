@@ -92,7 +92,7 @@ export function HistoryList({ entries }: { entries: HistoryEntry[] }) {
             aria-selected={filter === f.key}
             onClick={() => setFilter(f.key)}
             className={cn(
-              'px-3 h-9 rounded-full text-xs font-semibold',
+              'px-3 h-11 rounded-full text-xs font-semibold',
               filter === f.key ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant',
             )}
           >

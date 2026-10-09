@@ -97,7 +97,7 @@ export function MembersStep({ members, suggestions, error, onMembersChange, onCo
                 key={s}
                 type="button"
                 onClick={() => add(s)}
-                className="px-3 h-9 rounded-full bg-surface-container text-xs font-semibold text-on-surface"
+                className="px-3 h-11 rounded-full bg-surface-container text-xs font-semibold text-on-surface"
               >
                 + {s}
               </button>
@@ -125,7 +125,7 @@ export function MembersStep({ members, suggestions, error, onMembersChange, onCo
               type="button"
               onClick={() => setPayer(m.id)}
               aria-pressed={m.is_payer}
-              className={`shrink-0 px-2.5 h-10 rounded-lg text-xs font-semibold ${
+              className={`shrink-0 px-3 h-11 rounded-lg text-xs font-semibold ${
                 m.is_payer ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant'
               }`}
             >
@@ -135,7 +135,7 @@ export function MembersStep({ members, suggestions, error, onMembersChange, onCo
               type="button"
               onClick={() => remove(m.id)}
               aria-label={`Hapus ${m.name}`}
-              className="shrink-0 w-9 h-10 text-error text-sm"
+              className="shrink-0 w-11 h-11 text-error text-sm"
             >
               ✕
             </button>

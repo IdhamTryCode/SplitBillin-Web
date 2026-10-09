@@ -103,7 +103,7 @@ export function BillView({ bill }: { bill: BillViewData }) {
                 onClick={() => pick(m.id)}
                 aria-pressed={m.id === meId}
                 className={cn(
-                  'inline-flex items-center gap-1.5 pl-1.5 pr-3 h-10 rounded-full text-xs font-semibold transition-colors',
+                  'inline-flex items-center gap-1.5 pl-1.5 pr-3 h-11 rounded-full text-xs font-semibold transition-colors',
                   m.id === meId ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface',
                 )}
               >
@@ -134,7 +134,7 @@ export function BillView({ bill }: { bill: BillViewData }) {
                         type="button"
                         onClick={() => setOpen((prev) => ({ ...prev, [m.id]: !prev[m.id] }))}
                         aria-expanded={expanded}
-                        className="text-[11px] text-on-surface-variant underline underline-offset-2 py-1"
+                        className="h-11 flex items-center text-[11px] text-on-surface-variant underline underline-offset-2"
                       >
                         Rincian pesanan {expanded ? '▴' : '▾'}
                       </button>

@@ -31,8 +31,11 @@ export function ManualDetails({
       <h1 className="text-lg font-bold text-on-surface">Total Tagihan &amp; Keterangan</h1>
 
       <div className="flex flex-col gap-1">
-        <label className="text-xs text-on-surface-variant font-medium">Nama Tempat / Acara</label>
+        <label htmlFor="manual-merchant" className="text-xs text-on-surface-variant font-medium">
+          Nama Tempat / Acara
+        </label>
         <input
+          id="manual-merchant"
           type="text"
           value={merchant}
           onChange={(e) => onMerchantChange(e.target.value)}
@@ -42,18 +45,22 @@ export function ManualDetails({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-xs text-on-surface-variant font-medium">Total Yang Dibayar (Rp)</label>
+        <span className="text-xs text-on-surface-variant font-medium">Total Yang Dibayar (Rp)</span>
         <MoneyInput
           value={total}
           onChange={onTotalChange}
           placeholder="55.700"
+          ariaLabel="Total yang dibayar (Rp)"
           className="p-3 rounded-xl bg-surface-container-low dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-lg font-bold text-primary focus:outline-primary"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-xs text-on-surface-variant font-medium">Tanggal</label>
+        <label htmlFor="manual-date" className="text-xs text-on-surface-variant font-medium">
+          Tanggal
+        </label>
         <input
+          id="manual-date"
           type="date"
           value={date}
           onChange={(e) => onDateChange(e.target.value)}
