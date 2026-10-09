@@ -8,7 +8,7 @@ import { getUser } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = { title: 'Masuk' }
+export const metadata: Metadata = { title: 'Masuk', robots: { index: false, follow: false } }
 
 function safeNext(next: string | undefined): string {
   if (!next || !next.startsWith('/') || next.startsWith('//') || next.includes('\\')) return '/'

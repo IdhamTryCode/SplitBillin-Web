@@ -8,7 +8,7 @@ import { getUser } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = { title: 'Pengaturan' }
+export const metadata: Metadata = { title: 'Pengaturan', robots: { index: false, follow: false } }
 
 export default async function AccountPage() {
   const user = await getUser()

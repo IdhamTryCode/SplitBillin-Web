@@ -3,6 +3,7 @@ import { ContactLine, InfoPage, InfoSection } from '@/components/InfoPage'
 
 export const metadata: Metadata = {
   title: 'Ketentuan Penggunaan',
+  alternates: { canonical: '/ketentuan' },
   description: 'Aturan main memakai SplitBillin.',
 }
 

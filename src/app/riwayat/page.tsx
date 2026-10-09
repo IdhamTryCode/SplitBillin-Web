@@ -7,7 +7,7 @@ import { getUser } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = { title: 'Riwayat' }
+export const metadata: Metadata = { title: 'Riwayat', robots: { index: false, follow: false } }
 
 export default async function HistoryPage() {
   const user = await getUser()

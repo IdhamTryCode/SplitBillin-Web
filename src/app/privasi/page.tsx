@@ -3,6 +3,7 @@ import { ContactLine, InfoPage, InfoSection } from '@/components/InfoPage'
 
 export const metadata: Metadata = {
   title: 'Kebijakan Privasi',
+  alternates: { canonical: '/privasi' },
   description: 'Data apa yang disimpan SplitBillin, berapa lama, dan siapa yang bisa melihatnya.',
 }
 

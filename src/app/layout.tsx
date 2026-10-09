@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
 import { Providers } from '@/components/Providers'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site'
 import './globals.css'
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -18,10 +19,31 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
-  title: { default: 'SplitBillin — Bagi tagihan tanpa ribet', template: '%s · SplitBillin' },
-  description:
-    'Foto struk, hitung otomatis, bagikan link. Gratis, tanpa daftar.',
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE_TITLE, template: `%s · ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    'split bill',
+    'split bill online',
+    'aplikasi split bill',
+    'bagi tagihan',
+    'patungan',
+    'hitung patungan',
+    'scan struk',
+    'bagi bill restoran',
+    'kalkulator patungan',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'id_ID',
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: SITE_TITLE, description: SITE_DESCRIPTION },
+  // Paste the code from Google Search Console into this env var to verify the site.
+  verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined },
 }
 
 export const viewport: Viewport = {

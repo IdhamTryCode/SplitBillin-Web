@@ -1,6 +1,10 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { AppShell } from '@/components/AppShell'
+import { HomeContent, HomeJsonLd } from '@/components/HomeContent'
 import { DraftChip, HomeHistory } from '@/components/HomeLocal'
+
+export const metadata: Metadata = { alternates: { canonical: '/' } }
 
 const CHOICES = [
   {
@@ -24,10 +28,11 @@ export default function Home() {
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2 pt-1">
             <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-on-surface">
-              Bagi tagihan tanpa ribet.
+              Split bill tanpa ribet.
             </h1>
             <p className="text-sm text-on-surface-variant">
-              Foto struk, hitung otomatis, bagikan satu link ke teman-temanmu. Bebas dipakai tanpa daftar.
+              Bagi tagihan makan bareng teman: foto struk, hitung otomatis, bagikan satu link. Gratis dan bebas
+              dipakai tanpa daftar.
             </p>
           </div>
 
@@ -64,6 +69,9 @@ export default function Home() {
 
         <HomeHistory />
       </div>
+
+      <HomeContent />
+      <HomeJsonLd />
     </AppShell>
   )
 }
