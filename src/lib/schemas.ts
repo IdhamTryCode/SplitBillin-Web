@@ -21,7 +21,9 @@ export const OtherFeeSchema = z.object({
 
 export const ReceiptSchema = z.object({
   is_receipt: z.literal(true),
-  merchant: z.string().min(1).max(80),
+  // Merchant can be unreadable on some receipts; the user fills it in on the
+  // correction screen (falls back to "Tanpa nama").
+  merchant: z.string().max(80).default(''),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
   items: z.array(ReceiptItemSchema).min(1),
   subtotal: z.number().int().default(0),

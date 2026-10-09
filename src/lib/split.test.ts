@@ -120,5 +120,38 @@ describe('split.ts', () => {
       expect(res.unpaid).toBe(res.memberTotals['evan'] + res.memberTotals['sulthan'])
     })
   })
+
+  describe('receipt-mode invariant with tax added + rounding (sample warung)', () => {
+    const items: BillItem[] = [
+      { id: 'a', name: 'Nasi Goreng Spesial', qty: 2, unit_price: 28000, line_total: 56000, discount: 0 },
+      { id: 'b', name: 'Es Teh Manis', qty: 2, unit_price: 8000, line_total: 16000, discount: 0 },
+      { id: 'c', name: 'Ayam Bakar', qty: 1, unit_price: 35000, line_total: 35000, discount: 5000 },
+      { id: 'd', name: 'Kerupuk', qty: 1, unit_price: 5000, line_total: 5000, discount: 0 },
+    ]
+    const fees: BillFees = {
+      discount: 0,
+      service: 5350,
+      other: [],
+      tax: 11235,
+      tax_included: false,
+      rounding: 15,
+      adjustment: 0,
+    }
+    const total = 123600
+    const members: BillMember[] = [
+      { id: 'a1', name: 'Aku', color: '#7e22ce', is_payer: true, paid_at: null },
+      { id: 'b1', name: 'Budi', color: '#2563eb', is_payer: false, paid_at: null },
+      { id: 'c1', name: 'Citra', color: '#059669', is_payer: false, paid_at: null },
+    ]
+    const assignments: Record<string, ItemAssignment[]> = {}
+    for (const item of items) assignments[item.id] = members.map((m) => ({ member_id: m.id }))
+
+    it('sums member totals to the bill total and matches computed', () => {
+      const res = computeSplit(items, fees, total, members, assignments)
+      const sum = Object.values(res.memberTotals).reduce((a, b) => a + b, 0)
+      expect(sum).toBe(total)
+      expect(res.computed).toBe(total)
+    })
+  })
 })
 

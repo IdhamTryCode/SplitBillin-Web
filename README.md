@@ -92,3 +92,4 @@ npm run test:run
 ## 📄 Lisensi
 
 MIT License © 2026 SplitBillin
+

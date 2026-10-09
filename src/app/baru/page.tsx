@@ -1,310 +1,358 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { ModeChooser } from '@/components/baru/ModeChooser'
+import { ScanCapture } from '@/components/baru/ScanCapture'
+import { ScanLoading } from '@/components/baru/ScanLoading'
+import { ItemReview } from '@/components/baru/ItemReview'
+import { ManualDetails } from '@/components/baru/ManualDetails'
+import { MembersStep } from '@/components/baru/MembersStep'
+import { AssignStep } from '@/components/baru/AssignStep'
+import { ManualSplitStep } from '@/components/baru/ManualSplitStep'
+import { PaymentStep } from '@/components/baru/PaymentStep'
+import { ReviewStep } from '@/components/baru/ReviewStep'
+import { SuccessScreen } from '@/components/baru/SuccessScreen'
+import { StepIndicator } from '@/components/baru/StepIndicator'
+import { DEFAULT_COLORS, emptyFees, type Branch, type CreatedBill, type Phase, type ScanFailure } from '@/components/baru/types'
 import { createBillAction } from '@/lib/actions/bill-actions'
-import { formatIDR, parseIDR } from '@/lib/money'
-import type { BillData, BillMember } from '@/lib/schemas'
+import { receiptToBillDraft } from '@/lib/receipt'
+import type { CompressedImage } from '@/lib/image'
+import type { ScanApiResponse } from '@/lib/scan-types'
+import type {
+  BillData,
+  BillFees,
+  BillItem,
+  BillMember,
+  ItemAssignment,
+  ManualSplit,
+  PaymentInfo,
+} from '@/lib/schemas'
 
-const DEFAULT_COLORS = ['#7e22ce', '#2563eb', '#059669', '#d97706', '#db2777', '#0891b2']
+const SCAN_STEPS = ['Struk', 'Item', 'Anggota', 'Bagi', 'Bayar', 'Selesai']
+const MANUAL_STEPS = ['Acara', 'Anggota', 'Bagi', 'Bayar', 'Selesai']
+
+function newId(): string {
+  return typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `id_${Date.now().toString(36)}`
+}
 
 export default function CreateBillWizard() {
-  const router = useRouter()
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1) // Manual wizard steps: 1: Total/Merchant -> 2: Anggota -> 3: Mode Bagi -> 4: Bayar & Buat
-  const [submitting, setSubmitting] = useState(false)
+  const [branch, setBranch] = useState<Branch | null>(null)
+  const [phase, setPhase] = useState<Phase>('choose')
   const [error, setError] = useState<string | null>(null)
 
-  // Form State
   const [merchant, setMerchant] = useState('')
-  const [totalInput, setTotalInput] = useState('')
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
+  const [total, setTotal] = useState(0)
+  const [items, setItems] = useState<BillItem[]>([])
+  const [fees, setFees] = useState<BillFees>(emptyFees)
 
   const [members, setMembers] = useState<BillMember[]>([
     { id: 'm1', name: 'Aku', color: DEFAULT_COLORS[0], is_payer: true, paid_at: null },
     { id: 'm2', name: 'Budi', color: DEFAULT_COLORS[1], is_payer: false, paid_at: null },
   ])
-  const [newMemberName, setNewMemberName] = useState('')
+  const [assignments, setAssignments] = useState<Record<string, ItemAssignment[]>>({})
+  const [manual, setManual] = useState<ManualSplit>({ split: 'equal', values: {} })
+  const [payment, setPayment] = useState<PaymentInfo>({ methods: [], qris_path: null, note: '' })
 
-  const [splitMode, setSplitMode] = useState<'equal' | 'amount' | 'percent'>('equal')
-  const [manualValues, setManualValues] = useState<Record<string, number>>({})
+  const [receiptImage, setReceiptImage] = useState<CompressedImage | null>(null)
+  const [scanFailure, setScanFailure] = useState<ScanFailure | null>(null)
 
-  const [bankProvider, setBankProvider] = useState('BCA')
-  const [bankNumber, setBankNumber] = useState('')
-  const [bankHolder, setBankHolder] = useState('')
-  const [note, setNote] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [created, setCreated] = useState<CreatedBill | null>(null)
 
-  const totalAmount = parseIDR(totalInput) || 0
+  useEffect(() => {
+    const mode = new URLSearchParams(window.location.search).get('mode')
+    if (mode === 'scan') setBranch('scan')
+    else if (mode === 'manual') setBranch('manual')
+  }, [])
 
-  const handleAddMember = () => {
-    if (!newMemberName.trim()) return
-    const id = `m_${Date.now()}`
-    const color = DEFAULT_COLORS[members.length % DEFAULT_COLORS.length]
-    setMembers([...members, { id, name: newMemberName.trim(), color, is_payer: false, paid_at: null }])
-    setNewMemberName('')
+  useEffect(() => {
+    return () => {
+      if (receiptImage) URL.revokeObjectURL(receiptImage.previewUrl)
+    }
+  }, [receiptImage])
+
+  const runScan = async (image: CompressedImage) => {
+    setScanFailure(null)
+    setError(null)
+    setPhase('loading')
+    const form = new FormData()
+    form.append('image', image.blob, 'receipt.jpg')
+    try {
+      const res = await fetch('/api/scan', { method: 'POST', body: form })
+      const json = (await res.json()) as ScanApiResponse
+      if (!json.ok) {
+        setScanFailure({ code: json.code, retryAfter: json.retryAfter })
+        return
+      }
+      const draft = receiptToBillDraft(json.receipt, newId)
+      setMerchant(draft.merchant)
+      setDate(draft.date ?? '')
+      setItems(draft.items)
+      setFees(draft.fees)
+      setTotal(draft.total)
+      setAssignments({})
+      setPhase('review')
+    } catch {
+      setScanFailure({ code: 'upstream_error' })
+    }
   }
 
-  const handleRemoveMember = (id: string) => {
-    if (members.length <= 2) return
-    setMembers(members.filter((m) => m.id !== id))
+  const handleUseImage = (image: CompressedImage) => {
+    setReceiptImage((prev) => {
+      if (prev) URL.revokeObjectURL(prev.previewUrl)
+      return image
+    })
+    void runScan(image)
   }
 
-  const handleSetPayer = (id: string) => {
-    setMembers(members.map((m) => ({ ...m, is_payer: m.id === id })))
+  const goManual = () => {
+    setBranch('manual')
+    setError(null)
+    setPhase('details')
+  }
+
+  const buildBillData = (): BillData => {
+    const cleanFees: BillFees = {
+      ...fees,
+      other: fees.other
+        .filter((f) => f.name.trim() || f.amount !== 0)
+        .map((f) => ({ name: f.name.trim() || 'Biaya lain', amount: f.amount })),
+    }
+    const label = merchant.trim() || 'Tanpa nama'
+
+    if (branch === 'scan') {
+      return {
+        version: 1,
+        mode: 'receipt',
+        merchant: label,
+        date: date || null,
+        items,
+        fees: cleanFees,
+        total,
+        members,
+        assignments,
+        manual: null,
+        payment,
+      }
+    }
+    return {
+      version: 1,
+      mode: 'manual',
+      merchant: label,
+      date: date || null,
+      items: [],
+      fees: emptyFees(),
+      total,
+      members,
+      assignments: {},
+      manual,
+      payment,
+    }
   }
 
   const handleSubmit = async () => {
-    if (totalAmount <= 0) {
-      setError('Total tagihan harus lebih dari 0')
-      return
-    }
-    if (!merchant.trim()) {
-      setError('Nama tempat / acara wajib diisi')
-      return
-    }
-
     setSubmitting(true)
     setError(null)
-
-    const billData: BillData = {
-      version: 1,
-      mode: 'manual',
-      merchant: merchant.trim(),
-      date,
-      items: [],
-      fees: { discount: 0, service: 0, other: [], tax: 0, tax_included: false, rounding: 0, adjustment: 0 },
-      total: totalAmount,
-      members,
-      assignments: {},
-      manual: {
-        split: splitMode,
-        values: manualValues,
-      },
-      payment: {
-        methods: bankNumber ? [{ kind: 'bank', provider: bankProvider, number: bankNumber, holder: bankHolder }] : [],
-        qris_path: null,
-        note,
-      },
-    }
-
-    const res = await createBillAction(billData)
+    const res = await createBillAction(buildBillData())
     setSubmitting(false)
-
     if (res.ok && res.id && res.editToken) {
-      router.push(`/b/${res.id}/kelola/${res.editToken}`)
+      setCreated({ id: res.id, editToken: res.editToken })
+      setPhase('sukses')
     } else {
       setError(res.error || 'Gagal membuat split bill')
     }
   }
 
+  const reset = () => {
+    if (receiptImage) URL.revokeObjectURL(receiptImage.previewUrl)
+    setReceiptImage(null)
+    setScanFailure(null)
+    setCreated(null)
+    setBranch(null)
+    setPhase('choose')
+    setMerchant('')
+    setDate(new Date().toISOString().slice(0, 10))
+    setTotal(0)
+    setItems([])
+    setFees(emptyFees())
+    setAssignments({})
+    setManual({ split: 'equal', values: {} })
+    setPayment({ methods: [], qris_path: null, note: '' })
+    setMembers([
+      { id: 'm1', name: 'Aku', color: DEFAULT_COLORS[0], is_payer: true, paid_at: null },
+      { id: 'm2', name: 'Budi', color: DEFAULT_COLORS[1], is_payer: false, paid_at: null },
+    ])
+    setError(null)
+  }
+
+  const steps = branch === 'manual' ? MANUAL_STEPS : SCAN_STEPS
+  const stepIndex: Record<Phase, number> = {
+    choose: 0,
+    details: 0,
+    capture: 0,
+    loading: 0,
+    review: 1,
+    anggota: 2,
+    bagi: 3,
+    bayar: 4,
+    tinjau: 4,
+    sukses: steps.length - 1,
+  }
+
+  const showIndicator = phase !== 'choose' && phase !== 'sukses'
+
   return (
     <main className="min-h-screen bg-surface dark:bg-dark-canvas p-4 flex flex-col items-center">
       <div className="max-w-[480px] w-full flex flex-col gap-5 pt-4">
-        {/* Step Indicator */}
-        <div className="flex items-center justify-between text-xs font-mono text-on-surface-variant">
-          <span className="text-primary font-bold">LANGKAH {step} DARI 4</span>
-          <span>{step === 1 ? 'Total' : step === 2 ? 'Anggota' : step === 3 ? 'Bagi' : 'Bayar'}</span>
-        </div>
+        {showIndicator && <StepIndicator steps={steps} current={stepIndex[phase]} />}
 
-        {error && (
-          <div className="bg-error-container text-on-error-container p-3 rounded-xl text-xs">{error}</div>
+        {phase === 'choose' && (
+          <ModeChooser
+            onSelect={(b) => {
+              setBranch(b)
+              setError(null)
+              setPhase(b === 'scan' ? 'capture' : 'details')
+            }}
+          />
         )}
 
-        {/* STEP 1: Total & Merchant */}
-        {step === 1 && (
-          <div className="bg-surface-container-lowest dark:bg-dark-card rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col gap-4">
-            <h1 className="text-lg font-bold text-on-surface">Total Tagihan & Keterangan</h1>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-on-surface-variant font-medium">Nama Tempat / Acara</label>
-              <input
-                type="text"
-                value={merchant}
-                onChange={(e) => setMerchant(e.target.value)}
-                placeholder="misal: Makan Siang Warung Bu Tini"
-                className="p-3 rounded-xl bg-surface-container-low dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm text-on-surface focus:outline-primary"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-on-surface-variant font-medium">Total Yang Dibayar (Rp)</label>
-              <input
-                type="text"
-                value={totalInput}
-                onChange={(e) => setTotalInput(e.target.value)}
-                placeholder="55.700"
-                className="p-3 rounded-xl bg-surface-container-low dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-lg font-mono font-bold text-primary focus:outline-primary"
-              />
-            </div>
-            <button
-              onClick={() => {
-                if (!merchant || totalAmount <= 0) {
-                  setError('Lengkapi nama tempat dan total tagihan')
-                  return
-                }
-                setError(null)
-                setStep(2)
-              }}
-              className="mt-2 py-3 bg-primary text-on-primary font-semibold rounded-xl text-sm"
-            >
-              Lanjut Pilih Anggota →
-            </button>
-          </div>
+        {phase === 'capture' && (
+          <ScanCapture onUseImage={handleUseImage} onManual={goManual} onBack={() => setPhase('choose')} />
         )}
 
-        {/* STEP 2: Anggota */}
-        {step === 2 && (
-          <div className="bg-surface-container-lowest dark:bg-dark-card rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col gap-4">
-            <h1 className="text-lg font-bold text-on-surface">Siapa Saja Yang Patungan?</h1>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newMemberName}
-                onChange={(e) => setNewMemberName(e.target.value)}
-                placeholder="Nama teman..."
-                className="flex-1 p-2.5 rounded-xl bg-surface-container-low dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm text-on-surface"
-              />
-              <button onClick={handleAddMember} className="px-4 bg-primary text-on-primary font-semibold rounded-xl text-sm">
-                + Tambah
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <span className="text-xs text-on-surface-variant font-semibold">Daftar Anggota & Penalang:</span>
-              {members.map((m) => (
-                <div key={m.id} className="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low dark:bg-slate-900">
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full text-white text-xs font-bold flex items-center justify-center" style={{ backgroundColor: m.color }}>
-                      {m.name[0]?.toUpperCase()}
-                    </span>
-                    <span className="text-sm text-on-surface font-medium">{m.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleSetPayer(m.id)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-medium ${
-                        m.is_payer ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'
-                      }`}
-                    >
-                      {m.is_payer ? 'Penalang ✓' : 'Set Penalang'}
-                    </button>
-                    {members.length > 2 && (
-                      <button onClick={() => handleRemoveMember(m.id)} className="text-error text-xs p-1">✕</button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex gap-2 mt-2">
-              <button onClick={() => setStep(1)} className="flex-1 py-3 bg-surface-container text-on-surface font-semibold rounded-xl text-sm">
-                ← Kembali
-              </button>
-              <button onClick={() => setStep(3)} className="flex-1 py-3 bg-primary text-on-primary font-semibold rounded-xl text-sm">
-                Lanjut Cara Bagi →
-              </button>
-            </div>
-          </div>
+        {phase === 'loading' && receiptImage && (
+          <ScanLoading
+            previewUrl={receiptImage.previewUrl}
+            failure={scanFailure}
+            onRetry={() => receiptImage && void runScan(receiptImage)}
+            onRescan={() => {
+              setScanFailure(null)
+              setPhase('capture')
+            }}
+            onManual={goManual}
+            onCancel={() => {
+              setScanFailure(null)
+              setPhase('capture')
+            }}
+          />
         )}
 
-        {/* STEP 3: Mode Pembagian */}
-        {step === 3 && (
-          <div className="bg-surface-container-lowest dark:bg-dark-card rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col gap-4">
-            <h1 className="text-lg font-bold text-on-surface">Cara Membagi</h1>
-            <div className="flex rounded-xl bg-surface-container-low p-1 gap-1">
-              <button
-                onClick={() => setSplitMode('equal')}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold ${splitMode === 'equal' ? 'bg-white dark:bg-dark-card shadow text-primary' : 'text-on-surface-variant'}`}
-              >
-                Bagi Rata
-              </button>
-              <button
-                onClick={() => setSplitMode('amount')}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold ${splitMode === 'amount' ? 'bg-white dark:bg-dark-card shadow text-primary' : 'text-on-surface-variant'}`}
-              >
-                Nominal
-              </button>
-            </div>
-
-            {splitMode === 'equal' && (
-              <p className="text-xs text-on-surface-variant bg-surface-container-low p-3 rounded-xl">
-                Total {formatIDR(totalAmount)} akan dibagi rata ke {members.length} orang ({formatIDR(Math.floor(totalAmount / members.length))} / orang).
-              </p>
-            )}
-
-            {splitMode === 'amount' && (
-              <div className="flex flex-col gap-2">
-                {members.map((m) => (
-                  <div key={m.id} className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-medium text-on-surface">{m.name}</span>
-                    <input
-                      type="number"
-                      placeholder="0"
-                      value={manualValues[m.id] || ''}
-                      onChange={(e) => setManualValues({ ...manualValues, [m.id]: Number(e.target.value) })}
-                      className="p-2 rounded-lg bg-surface-container-low border text-right font-mono text-xs w-32"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="flex gap-2 mt-2">
-              <button onClick={() => setStep(2)} className="flex-1 py-3 bg-surface-container text-on-surface font-semibold rounded-xl text-sm">
-                ← Kembali
-              </button>
-              <button onClick={() => setStep(4)} className="flex-1 py-3 bg-primary text-on-primary font-semibold rounded-xl text-sm">
-                Lanjut Info Bayar →
-              </button>
-            </div>
-          </div>
+        {phase === 'review' && (
+          <ItemReview
+            previewUrl={receiptImage?.previewUrl ?? null}
+            merchant={merchant}
+            date={date}
+            items={items}
+            fees={fees}
+            total={total}
+            onMerchantChange={setMerchant}
+            onDateChange={setDate}
+            onItemsChange={setItems}
+            onFeesChange={setFees}
+            onTotalChange={setTotal}
+            onContinue={() => {
+              if (items.length === 0) {
+                setError('Tambahkan minimal satu item dulu.')
+                return
+              }
+              setError(null)
+              setPhase('anggota')
+            }}
+            onManual={goManual}
+            onBack={() => setPhase('capture')}
+          />
         )}
 
-        {/* STEP 4: Info Bayar & Submit */}
-        {step === 4 && (
-          <div className="bg-surface-container-lowest dark:bg-dark-card rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col gap-4">
-            <h1 className="text-lg font-bold text-on-surface">Info Pembayaran (Opsional)</h1>
-            <div className="flex flex-col gap-2">
-              <label className="text-xs text-on-surface-variant font-medium">Bank / E-Wallet</label>
-              <input
-                type="text"
-                value={bankProvider}
-                onChange={(e) => setBankProvider(e.target.value)}
-                placeholder="BCA / Mandiri / GoPay"
-                className="p-2.5 rounded-xl bg-surface-container-low border text-xs"
-              />
-              <input
-                type="text"
-                value={bankNumber}
-                onChange={(e) => setBankNumber(e.target.value)}
-                placeholder="Nomor Rekening / HP"
-                className="p-2.5 rounded-xl bg-surface-container-low border text-xs font-mono"
-              />
-              <input
-                type="text"
-                value={bankHolder}
-                onChange={(e) => setBankHolder(e.target.value)}
-                placeholder="Atas Nama"
-                className="p-2.5 rounded-xl bg-surface-container-low border text-xs"
-              />
-            </div>
+        {phase === 'details' && (
+          <ManualDetails
+            merchant={merchant}
+            total={total}
+            date={date}
+            error={error}
+            onMerchantChange={setMerchant}
+            onTotalChange={setTotal}
+            onDateChange={setDate}
+            onContinue={() => {
+              if (total <= 0) return setError('Total tagihan harus lebih dari 0')
+              if (!merchant.trim()) return setError('Nama tempat / acara wajib diisi')
+              setError(null)
+              setPhase('anggota')
+            }}
+            onBack={() => setPhase('choose')}
+          />
+        )}
 
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-on-surface-variant font-medium">Catatan Untuk Teman</label>
-              <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="misal: Transfer sebelum hari Jumat ya..."
-                className="p-2.5 rounded-xl bg-surface-container-low border text-xs"
-                rows={2}
-              />
-            </div>
+        {phase === 'anggota' && (
+          <MembersStep
+            members={members}
+            error={error}
+            onMembersChange={setMembers}
+            onContinue={() => {
+              if (members.length < 2) return setError('Minimal 2 orang ya')
+              if (members.some((m) => !m.name.trim())) return setError('Nama anggota tidak boleh kosong')
+              setError(null)
+              setPhase('bagi')
+            }}
+            onBack={() => setPhase(branch === 'manual' ? 'details' : 'review')}
+          />
+        )}
 
-            <button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="w-full py-3.5 bg-primary text-on-primary font-semibold rounded-xl text-sm shadow-md mt-2"
-            >
-              {submitting ? 'Membuat Split Bill...' : 'Buat Split Bill ✓'}
-            </button>
-          </div>
+        {phase === 'bagi' && branch === 'scan' && (
+          <AssignStep
+            items={items}
+            fees={fees}
+            total={total}
+            members={members}
+            assignments={assignments}
+            onAssignmentsChange={setAssignments}
+            onContinue={() => setPhase('bayar')}
+            onBack={() => setPhase('anggota')}
+          />
+        )}
+
+        {phase === 'bagi' && branch === 'manual' && (
+          <ManualSplitStep
+            total={total}
+            members={members}
+            manual={manual}
+            onManualChange={setManual}
+            onContinue={() => setPhase('bayar')}
+            onBack={() => setPhase('anggota')}
+          />
+        )}
+
+        {phase === 'bayar' && (
+          <PaymentStep
+            payment={payment}
+            onPaymentChange={setPayment}
+            onContinue={() => setPhase('tinjau')}
+            onBack={() => setPhase('bagi')}
+          />
+        )}
+
+        {phase === 'tinjau' && (
+          <ReviewStep
+            mode={branch === 'scan' ? 'receipt' : 'manual'}
+            merchant={merchant}
+            date={date}
+            total={total}
+            items={items}
+            fees={fees}
+            members={members}
+            assignments={assignments}
+            manual={manual}
+            payment={payment}
+            submitting={submitting}
+            error={error}
+            onAdjust={(diff) => setFees({ ...fees, adjustment: diff })}
+            onSubmit={handleSubmit}
+            onBack={() => setPhase('bayar')}
+          />
+        )}
+
+        {phase === 'sukses' && created && (
+          <SuccessScreen created={created} merchant={merchant} onNew={reset} />
         )}
       </div>
     </main>

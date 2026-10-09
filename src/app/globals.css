@@ -108,3 +108,28 @@
   color: var(--color-inverse-on-surface);
   background-color: var(--color-dark-canvas);
 }
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    top: 8%;
+  }
+  50% {
+    top: 88%;
+  }
+  100% {
+    top: 8%;
+  }
+}
+
+.animate-scan-line {
+  animation: scanLine 2.4s ease-in-out infinite;
+}
