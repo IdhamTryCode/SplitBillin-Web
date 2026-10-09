@@ -105,7 +105,7 @@ export function PaymentStep({
       </p>
 
       {payment.methods.map((method, idx) => (
-        <fieldset key={idx} className="bg-surface-container-low rounded-xl p-3 flex flex-col gap-2">
+        <fieldset key={idx} className="min-w-0 bg-surface-container-low rounded-xl p-3 flex flex-col gap-2">
           <legend className="sr-only">Cara bayar {idx + 1}</legend>
           <div className="flex items-center gap-1">
             {KINDS.map((k) => (

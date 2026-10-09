@@ -214,7 +214,7 @@ export function ItemReview({
           <button
             type="button"
             onClick={() => setEditing(newBlankItem())}
-            className="w-full py-2.5 rounded-xl bg-surface-container-low text-primary text-sm font-semibold"
+            className="w-full h-11 rounded-xl bg-surface-container-low text-primary text-sm font-semibold"
           >
             + Tambah Item
           </button>
@@ -298,7 +298,7 @@ export function ItemReview({
           <button
             type="button"
             onClick={() => updateFee({ other: [...fees.other, { name: 'Biaya lain', amount: 0 }] })}
-            className="self-start text-xs text-primary font-semibold py-1"
+            className="self-start h-11 text-xs text-primary font-semibold"
           >
             + Tambah Biaya Lain
           </button>
@@ -358,7 +358,7 @@ export function ItemReview({
               : 'Lanjut →'}
         </button>
       </div>
-      <button type="button" onClick={onManual} className="text-xs text-primary font-medium py-1 hover:underline">
+      <button type="button" onClick={onManual} className="h-11 text-xs text-primary font-medium hover:underline">
         Ganti ke isi manual
       </button>
 

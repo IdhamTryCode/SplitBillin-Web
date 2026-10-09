@@ -169,7 +169,7 @@ export function BillView({ bill }: { bill: BillViewData }) {
           <button
             type="button"
             onClick={reportIssue}
-            className="self-center text-primary font-semibold py-2 underline underline-offset-2"
+            className="self-center h-11 text-primary font-semibold underline underline-offset-2"
           >
             {copied === 'issue' ? 'Pesan tersalin, kirim ke pembuat ya' : 'Ada yang salah? Hubungi pembuat'}
           </button>

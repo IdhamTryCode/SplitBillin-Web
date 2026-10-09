@@ -116,14 +116,14 @@ export function AssignStep({
         <button
           type="button"
           onClick={assignAll}
-          className="flex-1 py-2 bg-surface-container text-primary font-semibold rounded-xl text-xs"
+          className="flex-1 h-11 bg-surface-container text-primary font-semibold rounded-xl text-xs"
         >
           Semua ikut
         </button>
         <button
           type="button"
           onClick={clearAll}
-          className="flex-1 py-2 bg-surface-container text-on-surface-variant font-semibold rounded-xl text-xs"
+          className="flex-1 h-11 bg-surface-container text-on-surface-variant font-semibold rounded-xl text-xs"
         >
           Kosongkan
         </button>
