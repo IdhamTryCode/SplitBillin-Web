@@ -43,7 +43,7 @@ npm install
 Salin file `.env.example` ke `.env` dan isi variabel yang diperlukan:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 
 LLM_BASE_URL=https://kenari.id/v1
