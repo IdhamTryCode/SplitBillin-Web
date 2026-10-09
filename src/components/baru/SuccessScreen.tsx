@@ -51,9 +51,17 @@ export function SuccessScreen({ created, merchant, onNew }: SuccessScreenProps) 
       {/* Share link */}
       <section className="bg-secondary-container/40 border border-primary/20 rounded-2xl p-4 flex flex-col gap-3">
         <h2 className="text-xs font-bold text-on-secondary-container uppercase tracking-wide">Link untuk dibagikan</h2>
-        <p className="text-xs font-mono text-on-surface break-all bg-surface-container-lowest rounded-lg p-2.5">
-          {shareUrl}
-        </p>
+        <div className="flex items-center gap-2 bg-surface-container-lowest rounded-lg p-2">
+          <span className="flex-1 min-w-0 px-1 text-xs font-mono text-on-surface break-all">{shareUrl}</span>
+          <button
+            type="button"
+            onClick={() => copy('share', shareUrl)}
+            aria-label="Salin link untuk dibagikan"
+            className="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-surface-container text-on-surface active:scale-95 transition-transform"
+          >
+            {copied === 'share' ? <CheckIcon className="w-4 h-4 text-primary" /> : <CopyIcon className="w-4 h-4" />}
+          </button>
+        </div>
         <a
           href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
           target="_blank"
@@ -62,24 +70,15 @@ export function SuccessScreen({ created, merchant, onNew }: SuccessScreenProps) 
         >
           Kirim lewat WhatsApp
         </a>
-        <div className="flex gap-2">
+        {canShare && (
           <button
             type="button"
-            onClick={() => copy('share', shareUrl)}
-            className="flex-1 h-11 bg-surface-container-lowest text-on-surface rounded-xl text-xs font-semibold"
+            onClick={nativeShare}
+            className="h-11 bg-surface-container-lowest text-on-surface rounded-xl text-xs font-semibold"
           >
-            {copied === 'share' ? 'Tersalin ✓' : 'Salin link'}
+            Bagikan…
           </button>
-          {canShare && (
-            <button
-              type="button"
-              onClick={nativeShare}
-              className="flex-1 h-11 bg-surface-container-lowest text-on-surface rounded-xl text-xs font-semibold"
-            >
-              Bagikan…
-            </button>
-          )}
-        </div>
+        )}
       </section>
 
       {isGuest ? (
@@ -89,20 +88,21 @@ export function SuccessScreen({ created, merchant, onNew }: SuccessScreenProps) 
             <h2 className="text-xs font-bold text-amber-900 dark:text-amber-200 uppercase tracking-wide">
               🔒 Link kelola — rahasia
             </h2>
-            <p className="text-xs font-mono text-on-surface break-all bg-surface-container-lowest rounded-lg p-2.5">
-              {manageUrl}
-            </p>
+            <div className="flex items-center gap-2 bg-surface-container-lowest rounded-lg p-2">
+              <span className="flex-1 min-w-0 px-1 text-xs font-mono text-on-surface break-all">{manageUrl}</span>
+              <button
+                type="button"
+                onClick={() => copy('manage', manageUrl)}
+                aria-label="Salin link kelola"
+                className="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-surface-container text-on-surface active:scale-95 transition-transform"
+              >
+                {copied === 'manage' ? <CheckIcon className="w-4 h-4 text-primary" /> : <CopyIcon className="w-4 h-4" />}
+              </button>
+            </div>
             <p className="text-xs text-amber-900 dark:text-amber-200">
               Hanya kamu yang boleh memegang ini. Dengan link ini kamu bisa mengubah dan menandai lunas. Jangan kirim
               ke grup.
             </p>
-            <button
-              type="button"
-              onClick={() => copy('manage', manageUrl)}
-              className="h-11 bg-surface-container-lowest text-on-surface rounded-xl text-xs font-semibold"
-            >
-              {copied === 'manage' ? 'Tersalin ✓' : 'Salin link kelola'}
-            </button>
             <p className="text-[11px] text-amber-900/80 dark:text-amber-200/80">
               ✓ Sudah disimpan di perangkat ini, bisa dibuka lagi dari Beranda.
             </p>
@@ -141,5 +141,40 @@ export function SuccessScreen({ created, merchant, onNew }: SuccessScreenProps) 
         Buat split bill lagi
       </button>
     </div>
+  )
+}
+
+function CopyIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="9" y="9" width="13" height="13" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  )
+}
+
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
   )
 }

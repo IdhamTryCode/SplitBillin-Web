@@ -16,6 +16,16 @@ export function formatIDR(amount: number): string {
 }
 
 /**
+ * Sama seperti formatIDR tanpa awalan "Rp" — hanya angka dengan titik ribuan.
+ * Dipakai kolom input nominal saat tidak difokus.
+ * @example formatIDRPlain(706497) → "706.497"
+ * @example formatIDRPlain(-6400) → "-6.400"
+ */
+export function formatIDRPlain(amount: number): string {
+  return formatIDR(amount).replace(/Rp/g, '')
+}
+
+/**
  * Parse string Rupiah Indonesia menjadi bilangan bulat.
  * Menerima format: "17.400", "17.400,00", "17400", "Rp 17.400", "Rp17.400"
  * Mengembalikan NaN bila tidak bisa diparse.

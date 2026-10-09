@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { parseIDR } from '@/lib/money'
+import React, { useState } from 'react'
+import { formatIDRPlain, parseIDR } from '@/lib/money'
 import { cn } from '@/lib/utils'
 
 interface MoneyInputProps {
@@ -14,8 +14,11 @@ interface MoneyInputProps {
 }
 
 /**
- * Text input for Rupiah amounts. Accepts "17.400", "17400", etc. via parseIDR
- * and reports an integer back to the parent.
+ * Text input for Rupiah amounts.
+ *
+ * While the field is focused the raw digits are shown so typing never fights
+ * the caret; once it loses focus the value is re-rendered with thousand
+ * separators (e.g. "706.497"). The parent always receives an integer.
  */
 export function MoneyInput({
   value,
@@ -25,25 +28,41 @@ export function MoneyInput({
   className,
   ariaLabel,
 }: MoneyInputProps) {
-  const [text, setText] = useState(value ? String(value) : '')
+  const [focused, setFocused] = useState(false)
+  const [draft, setDraft] = useState('')
 
-  useEffect(() => {
-    const parsed = parseIDR(text)
-    if (Number.isNaN(parsed) ? value !== 0 : parsed !== value) {
-      setText(value === 0 ? '' : String(value))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  const display = focused ? draft : value === 0 ? '' : formatIDRPlain(value)
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setDraft(value === 0 ? '' : String(value))
+    setFocused(true)
+    const el = e.currentTarget
+    requestAnimationFrame(() => {
+      const end = el.value.length
+      try {
+        el.setSelectionRange(end, end)
+      } catch {
+        /* setSelectionRange not supported on this input */
+      }
+    })
+  }
+
+  const handleBlur = () => {
+    setFocused(false)
+    setDraft('')
+  }
 
   const handleChange = (raw: string) => {
     let next = raw
     if (!allowNegative) next = next.replace(/-/g, '')
-    setText(next)
-    if (next.trim() === '') {
+    setDraft(next)
+
+    const trimmed = next.trim()
+    if (trimmed === '' || trimmed === '-') {
       onChange(0)
       return
     }
-    const parsed = parseIDR(next)
+    const parsed = parseIDR(trimmed)
     if (!Number.isNaN(parsed)) onChange(parsed)
   }
 
@@ -52,8 +71,10 @@ export function MoneyInput({
       type="text"
       inputMode="numeric"
       aria-label={ariaLabel}
-      value={text}
+      value={display}
       placeholder={placeholder}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       onChange={(e) => handleChange(e.target.value)}
       className={cn('font-mono', className)}
     />
