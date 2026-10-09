@@ -84,7 +84,6 @@ npm run test:run
 ## 📑 Struktur Proyek
 
 ```text
-├── scripts/               # Script pengujian OCR (butuh folder receipts/ lokal, tidak di-commit)
 ├── src/
 │   ├── app/
 │   │   ├── baru/          # Wizard buat / edit split bill

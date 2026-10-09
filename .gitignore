@@ -22,6 +22,9 @@ receipts/
 results*/
 coverage/
 stitch_splitbillin_ui_web_app*/
+scripts/
+plan.md
+design-brief.md
 
 # Agent / tool settings
 .commandcode/
