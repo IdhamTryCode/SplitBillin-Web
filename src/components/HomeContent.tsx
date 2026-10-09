@@ -18,12 +18,12 @@ const STEPS = [
 
 export const FAQS = [
   {
-    q: 'Apa itu split bill?',
-    a: 'Split bill adalah membagi satu tagihan ke beberapa orang, misalnya saat makan bareng dan satu orang nalangin dulu. SplitBillin menghitung bagian tiap orang sesuai pesanannya, bukan sekadar bagi rata.',
+    q: 'Apakah SplitBillin benar-benar gratis?',
+    a: 'Ya. Semua fitur gratis, termasuk scan struk, tanpa iklan dan tanpa biaya tersembunyi. Kamu bisa langsung pakai tanpa membuat akun.',
   },
   {
-    q: 'Apakah SplitBillin gratis?',
-    a: 'Ya, gratis dan tanpa iklan. Kamu bisa langsung pakai tanpa membuat akun.',
+    q: 'Apa itu split bill?',
+    a: 'Split bill adalah membagi satu tagihan ke beberapa orang, misalnya saat makan bareng dan satu orang nalangin dulu. SplitBillin menghitung bagian tiap orang sesuai pesanannya, bukan sekadar bagi rata.',
   },
   {
     q: 'Bagaimana pajak, service charge, dan diskon dibagi?',
@@ -86,7 +86,7 @@ export function HomeContent() {
     <div className="flex flex-col gap-8 mt-10">
       <section aria-labelledby="cara-kerja" className="flex flex-col gap-4">
         <h2 id="cara-kerja" className="text-lg font-bold text-on-surface">
-          Cara split bill pakai SplitBillin
+          Cara split bill gratis pakai SplitBillin
         </h2>
         <ol className="grid gap-3 lg:grid-cols-3">
           {STEPS.map((s, i) => (

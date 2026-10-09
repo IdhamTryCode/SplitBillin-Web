@@ -24,6 +24,8 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   keywords: [
+    'split bill gratis',
+    'aplikasi split bill gratis',
     'split bill',
     'split bill online',
     'aplikasi split bill',

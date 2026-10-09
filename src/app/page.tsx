@@ -28,12 +28,21 @@ export default function Home() {
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2 pt-1">
             <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-on-surface">
-              Split bill tanpa ribet.
+              Split bill gratis, tanpa ribet.
             </h1>
             <p className="text-sm text-on-surface-variant">
-              Bagi tagihan makan bareng teman: foto struk, hitung otomatis, bagikan satu link. Gratis dan bebas
-              dipakai tanpa daftar.
+              Bagi tagihan makan bareng teman: foto struk, hitung otomatis, bagikan satu link.
             </p>
+            <ul className="flex flex-wrap gap-2 pt-1" aria-label="Keunggulan">
+              {['100% gratis', 'Tanpa daftar', 'Tanpa iklan'].map((label) => (
+                <li
+                  key={label}
+                  className="px-3 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container text-xs font-semibold"
+                >
+                  ✓ {label}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="flex flex-col gap-3">

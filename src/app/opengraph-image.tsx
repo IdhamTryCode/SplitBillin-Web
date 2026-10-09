@@ -23,14 +23,14 @@ export default function OpengraphImage() {
         <div style={{ display: 'flex', fontSize: 44, fontWeight: 800 }}>SplitBillin</div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', fontSize: 84, fontWeight: 800, lineHeight: 1.1 }}>
-            Bagi tagihan tanpa ribet.
+            Split bill gratis.
           </div>
           <div style={{ display: 'flex', fontSize: 38, marginTop: 24, color: '#85f8c4' }}>
             Foto struk, hitung otomatis, bagikan satu link.
           </div>
         </div>
         <div style={{ display: 'flex', fontSize: 30, color: '#d6fbe9' }}>
-          Gratis · Tanpa daftar · splitbillin.my.id
+          100% gratis · Tanpa daftar · Tanpa iklan · splitbillin.my.id
         </div>
       </div>
     ),
