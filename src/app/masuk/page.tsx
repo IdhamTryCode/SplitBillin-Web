@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { AppShell } from '@/components/AppShell'
+import { Logo } from '@/components/Logo'
 import { GoogleSignInButton } from '@/components/account/GoogleSignInButton'
 import { scanQuotas } from '@/lib/scan-guard'
 import { getUser } from '@/lib/supabase/server'
@@ -30,12 +31,7 @@ export default async function SignInPage({
     <AppShell nav={false}>
       <div className="mt-6 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-5">
         <div className="flex flex-col gap-2 text-center items-center">
-          <span
-            className="w-14 h-14 rounded-2xl bg-secondary-container/60 flex items-center justify-center text-2xl"
-            aria-hidden
-          >
-            👋
-          </span>
+          <Logo variant="mark" size={64} />
           <h1 className="text-xl font-bold text-on-surface">Masuk ke SplitBillin</h1>
           <p className="text-sm text-on-surface-variant">Gak wajib kok, kamu tetap bisa pakai tanpa akun.</p>
         </div>

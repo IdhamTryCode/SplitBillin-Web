@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
+import { Logo } from '@/components/Logo'
 import { useUser } from '@/lib/use-user'
 import { cn } from '@/lib/utils'
 
@@ -47,8 +48,8 @@ export function AppHeader() {
   return (
     <header className="sticky top-0 z-30 bg-surface/90 backdrop-blur-md border-b border-outline-variant/40">
       <div className="mx-auto w-full max-w-[1040px] px-4 h-14 flex items-center justify-between gap-2">
-        <Link href="/" className="text-lg font-extrabold tracking-tight text-primary">
-          SplitBillin
+        <Link href="/" aria-label="SplitBillin, ke Beranda" className="flex items-center h-11 shrink-0">
+          <Logo size={30} />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1" aria-label="Navigasi utama">
