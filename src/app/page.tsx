@@ -9,16 +9,18 @@ export const metadata: Metadata = { alternates: { canonical: '/' } }
 export default function Home() {
   return (
     <AppShell width="wide">
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:gap-10 lg:items-start">
+      {/* Desktop centres the landing content in one readable column instead of
+          a lopsided two-column grid; mobile layout is unchanged (lg: only). */}
+      <div className="flex flex-col gap-6 lg:gap-10 lg:max-w-2xl lg:mx-auto lg:w-full">
         <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2 pt-1">
-            <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">
+          <div className="flex flex-col gap-2 pt-1 lg:items-center lg:text-center lg:pt-6">
+            <h1 className="text-3xl lg:text-5xl font-extrabold tracking-tight text-on-surface">
               Split bill gratis, tanpa ribet.
             </h1>
-            <p className="text-sm text-on-surface-variant">
+            <p className="text-sm lg:text-base text-on-surface-variant lg:max-w-md">
               Bagi tagihan makan bareng teman: foto struk, hitung otomatis, bagikan satu link.
             </p>
-            <ul className="flex flex-wrap gap-2 pt-1" aria-label="Keunggulan">
+            <ul className="flex flex-wrap gap-2 pt-1 lg:justify-center" aria-label="Keunggulan">
               {['100% gratis', 'Tanpa daftar', 'Tanpa iklan'].map((label) => (
                 <li
                   key={label}
@@ -88,7 +90,9 @@ export default function Home() {
         <HomeHistory />
       </div>
 
-      <HomeContent />
+      <div className="lg:max-w-2xl lg:mx-auto">
+        <HomeContent />
+      </div>
       <HomeJsonLd />
     </AppShell>
   )
