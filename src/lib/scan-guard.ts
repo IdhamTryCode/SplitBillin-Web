@@ -4,7 +4,7 @@
  * check runs before the LLM is called.
  */
 
-import { rateLimitDb } from '@/lib/rate-limit'
+import { clientIp, rateLimitDb } from '@/lib/rate-limit'
 import { verifyTurnstile } from '@/lib/turnstile'
 import type { ScanGuardFailure } from '@/lib/scan-types'
 
@@ -41,12 +41,13 @@ function secondsUntilTomorrow(): number {
 }
 
 /**
- * Resolve the caller's IP from proxy headers (first hop of x-forwarded-for).
+ * The caller's IP. On Vercel `x-real-ip` is a single client IP set by the
+ * platform and cannot be spoofed by the caller; `x-forwarded-for` is a list the
+ * client can append to, so it is only a fallback. Delegates to the shared
+ * `clientIp` helper so the scan guard and the rate limiter agree on one source.
  */
 export function getClientIp(req: Request): string {
-  const forwarded = req.headers.get('x-forwarded-for')
-  if (forwarded) return forwarded.split(',')[0]!.trim()
-  return req.headers.get('x-real-ip') ?? '0.0.0.0'
+  return clientIp(req.headers)
 }
 
 export async function checkScanGuard(req: {

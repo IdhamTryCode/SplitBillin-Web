@@ -22,8 +22,25 @@ import { generateShortId, generateToken, hashToken } from '@/lib/security'
 
 const QRIS_MAX_BYTES = 1_000_000
 const CREATE_PER_HOUR_IP = 30
+const MANAGE_PER_MIN_IP = 100
+const STATUS_PER_MIN_IP = 60
+const MINUTE_SECONDS = 60
 
 type ActionResult<T = object> = ({ ok: true } & T) | { ok: false; error: string }
+
+/**
+ * Per-IP throttle shared by the manage actions. Deliberately loose: a creator
+ * may mark a dozen members paid in a row without tripping it. The manage
+ * actions share one counter (`manage:<ip>`); the status poller has its own
+ * (`status:<ip>`).
+ */
+async function manageRateOk(prefix: string): Promise<boolean> {
+  const ip = clientIp(await headers())
+  const limit = prefix === 'status' ? STATUS_PER_MIN_IP : MANAGE_PER_MIN_IP
+  return rateLimitDb(`${prefix}:${ip}`, limit, MINUTE_SECONDS)
+}
+
+const TOO_MANY = 'Terlalu banyak permintaan, coba lagi sebentar.'
 
 /** Detect the real image type from its first bytes; the client's MIME is not trusted. */
 function sniffImage(bytes: Uint8Array): { ext: string; type: string } | null {
@@ -150,6 +167,7 @@ export async function togglePaidStatusAction(
   token: string | null,
   memberId: string,
 ): Promise<ActionResult<{ paidAt: string | null }>> {
+  if (!(await manageRateOk('manage'))) return { ok: false, error: TOO_MANY }
   const auth = await authorize(id, token)
   if ('error' in auth) return { ok: false, error: auth.error }
 
@@ -178,6 +196,7 @@ export async function updateBillAction(
   keepQris: boolean,
   qris?: FormData,
 ): Promise<ActionResult> {
+  if (!(await manageRateOk('manage'))) return { ok: false, error: TOO_MANY }
   const parsed = parseBill(data)
   if ('error' in parsed) return { ok: false, error: parsed.error }
   const auth = await authorize(id, token)
@@ -214,6 +233,7 @@ export async function extendBillAction(
   id: string,
   token: string | null,
 ): Promise<ActionResult<{ expiresAt: string }>> {
+  if (!(await manageRateOk('manage'))) return { ok: false, error: TOO_MANY }
   const auth = await authorize(id, token)
   if ('error' in auth) return { ok: false, error: auth.error }
   const expiresAt = expiryFromNow()
@@ -223,6 +243,7 @@ export async function extendBillAction(
 }
 
 export async function deleteBillAction(id: string, token: string | null): Promise<ActionResult> {
+  if (!(await manageRateOk('manage'))) return { ok: false, error: TOO_MANY }
   const auth = await authorize(id, token)
   if ('error' in auth) return { ok: false, error: auth.error }
   const { error } = await createAdminClient().from('bills').delete().eq('id', id)
@@ -236,6 +257,7 @@ export async function deleteBillAction(id: string, token: string | null): Promis
  * The token is retired afterwards: the account is now the only key.
  */
 export async function claimBillAction(id: string, token: string): Promise<ActionResult> {
+  if (!(await manageRateOk('manage'))) return { ok: false, error: TOO_MANY }
   const user = await getUser()
   if (!user) return { ok: false, error: 'Masuk dulu untuk menyimpan split bill ke akunmu' }
 
@@ -261,6 +283,7 @@ export async function getEditableBillAction(
   id: string,
   token: string | null,
 ): Promise<ActionResult<{ bill: BillView }>> {
+  if (!(await manageRateOk('manage'))) return { ok: false, error: TOO_MANY }
   const auth = await authorize(id, token)
   if ('error' in auth) return { ok: false, error: auth.error }
   return { ok: true, bill: await toBillView(auth.row) }
@@ -268,6 +291,7 @@ export async function getEditableBillAction(
 
 /** Live status for the bills remembered in this browser (public data only). */
 export async function getBillStatusesAction(ids: string[]): Promise<BillListItem[]> {
+  if (!(await manageRateOk('status'))) return []
   if (!Array.isArray(ids) || ids.some((id) => typeof id !== 'string')) return []
   return listBillsByIds(ids)
 }
